@@ -11,8 +11,8 @@ interface Props {
 
 const providerLabels: Record<AIProvider, string> = {
   openai: "OpenAI",
-  openai_compatible: "OpenAI-compatible",
-  ollama: "Ollama (local)",
+  openai_compatible: "OpenAI-kompatibel",
+  ollama: "Ollama (lokal)",
 };
 
 function formatBytes(bytes: number): string {
@@ -41,7 +41,7 @@ export default function AISettingsPanel({ settings, onChange }: Props) {
         onChange({ ...settings, model: models[0].name });
       }
     } catch (e) {
-      setOllamaError(e instanceof Error ? e.message : "Could not reach Ollama");
+      setOllamaError(e instanceof Error ? e.message : "Kunde inte nå Ollama");
       setOllamaModels([]);
     } finally {
       setOllamaLoading(false);
@@ -76,10 +76,10 @@ export default function AISettingsPanel({ settings, onChange }: Props) {
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-      <h2 className="text-base font-semibold text-slate-800">AI Provider Settings</h2>
+      <h2 className="text-base font-semibold text-slate-800">AI-leverantörsinställningar</h2>
 
       <label className="mt-3 grid gap-1 text-sm text-slate-700">
-        <span>Provider</span>
+        <span>Leverantör</span>
         <select
           value={settings.provider}
           onChange={(e) => applyProviderPreset(e.target.value as AIProvider)}
@@ -94,7 +94,7 @@ export default function AISettingsPanel({ settings, onChange }: Props) {
       </label>
 
       <label className="mt-3 grid gap-1 text-sm text-slate-700">
-        <span>Base URL</span>
+        <span>Bas-URL</span>
         <input
           value={settings.baseUrl}
           onChange={(e) => setField("baseUrl", e.target.value)}
@@ -106,13 +106,13 @@ export default function AISettingsPanel({ settings, onChange }: Props) {
       {settings.provider === "ollama" ? (
         <div className="mt-3 grid gap-1 text-sm text-slate-700">
           <div className="flex items-center justify-between">
-            <span>Model</span>
+            <span>Modell</span>
             <button
               onClick={() => void loadOllamaModels()}
               disabled={ollamaLoading}
               className="rounded bg-slate-100 px-2 py-1 text-xs hover:bg-slate-200 disabled:opacity-50"
             >
-              {ollamaLoading ? "Fetching..." : "Refresh models"}
+              {ollamaLoading ? "Hämtar..." : "Uppdatera modeller"}
             </button>
           </div>
           {ollamaModels.length > 0 ? (
@@ -132,14 +132,14 @@ export default function AISettingsPanel({ settings, onChange }: Props) {
               value={settings.model}
               onChange={(e) => setField("model", e.target.value)}
               className="rounded-lg border border-slate-300 px-2 py-2"
-              placeholder="e.g. llama3.1:8b"
+              placeholder="t.ex. llama3.1:8b"
             />
           )}
           {ollamaError && <p className="text-xs text-red-600">{ollamaError}</p>}
         </div>
       ) : (
         <label className="mt-3 grid gap-1 text-sm text-slate-700">
-          <span>Model</span>
+          <span>Modell</span>
           <input
             value={settings.model}
             onChange={(e) => setField("model", e.target.value)}
@@ -151,7 +151,7 @@ export default function AISettingsPanel({ settings, onChange }: Props) {
 
       {settings.provider !== "ollama" && (
         <label className="mt-3 grid gap-1 text-sm text-slate-700">
-          <span>API key</span>
+          <span>API-nyckel</span>
           <input
             type="password"
             value={settings.apiKey}
@@ -162,7 +162,7 @@ export default function AISettingsPanel({ settings, onChange }: Props) {
         </label>
       )}
 
-      <p className="mt-3 text-xs text-slate-500">Settings are stored only in this browser.</p>
+      <p className="mt-3 text-xs text-slate-500">Inställningar sparas endast i denna webbläsare.</p>
     </div>
   );
 }

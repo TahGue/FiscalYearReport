@@ -15,19 +15,19 @@ export default function HealthScorePanel({ txs }: Props) {
     <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h2 className="text-lg font-bold text-slate-800">Financial Health Score</h2>
-          <p className="mt-1 text-sm text-slate-500">Composite score from savings, recurring burden, and volatility risk.</p>
+          <h2 className="text-lg font-bold text-slate-800">Finansiell hälsopoäng</h2>
+          <p className="mt-1 text-sm text-slate-500">Sammansatt poäng från sparande, återkommande börda och volatilitetsrisk.</p>
         </div>
         <div className="text-right">
           <p className="text-3xl font-bold text-slate-900">{score.score}</p>
-          <p className="text-xs text-slate-500">Grade {score.grade}</p>
+          <p className="text-xs text-slate-500">Betyg {score.grade}</p>
         </div>
       </div>
 
       <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-3">
-        <Metric label="Savings rate" value={`${score.savingsRate.toFixed(1)}%`} />
-        <Metric label="Subscription burden" value={`${score.subscriptionBurden.toFixed(1)}%`} />
-        <Metric label="Anomaly risk" value={`${(score.anomalyRisk * 100).toFixed(0)}%`} />
+        <Metric label="Sparandefrekvens" value={`${score.savingsRate.toFixed(1)}%`} />
+        <Metric label="Prenumerationsbörda" value={`${score.subscriptionBurden.toFixed(1)}%`} />
+        <Metric label="Avvikelserisk" value={`${(score.anomalyRisk * 100).toFixed(0)}%`} />
       </div>
 
       <ul className="mt-3 space-y-1 text-sm text-slate-700">

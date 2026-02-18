@@ -115,7 +115,7 @@ export default function Dashboard({ txs, currency }: Props) {
               <BarChart data={merchantChartData} layout="vertical" margin={{ left: 0, right: 20 }}>
                 <XAxis type="number" tick={{ fontSize: 10 }} />
                 <YAxis type="category" dataKey="name" width={120} tick={{ fontSize: 10 }} />
-                <Tooltip formatter={(v) => formatTooltipValue(v, currency, "Spent")} />
+                <Tooltip formatter={(v) => formatTooltipValue(v, currency, "Spenderat")} />
                 <Bar dataKey="value" radius={[0, 4, 4, 0]}>
                   {merchantChartData.map((_, i) => (
                     <Cell key={i} fill={barColors[i % barColors.length]} />
@@ -193,7 +193,7 @@ export default function Dashboard({ txs, currency }: Props) {
                       <Cell key={entry.name} fill={CATEGORY_COLORS[entry.name] ?? "#9ca3af"} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(v) => formatTooltipValue(v, currency, "Spent")} />
+                  <Tooltip formatter={(v) => formatTooltipValue(v, currency, "Spenderat")} />
                   <Legend />
                 </PieChart>
               </ResponsiveContainer>

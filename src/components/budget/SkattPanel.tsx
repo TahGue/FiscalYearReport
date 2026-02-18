@@ -53,20 +53,20 @@ function DeductionCard({ d, currency }: { d: DetectedDeduction; currency: string
           </div>
           <div className="mt-1 flex flex-wrap gap-4 text-sm">
             <span className="text-slate-500">
-              Transactions: <span className="font-medium text-slate-800">{d.transactions.length}</span>
+              Transaktioner: <span className="font-medium text-slate-800">{d.transactions.length}</span>
             </span>
             <span className="text-slate-500">
-              Total paid: <span className="font-medium text-slate-800">{fmt(d.totalSpend, currency)}</span>
+              Totalt betalt: <span className="font-medium text-slate-800">{fmt(d.totalSpend, currency)}</span>
             </span>
             {d.estimatedTaxSaving > 0 && (
               <span className="text-slate-500">
-                Est. tax saving: <span className="font-bold text-green-700">{fmt(d.estimatedTaxSaving, currency)}</span>
+                Uppskattad skattebesparing: <span className="font-bold text-green-700">{fmt(d.estimatedTaxSaving, currency)}</span>
               </span>
             )}
           </div>
         </div>
         <button onClick={() => setOpen((v) => !v)} className="mt-1 shrink-0 text-xs text-blue-600 underline">
-          {open ? "Hide" : "Details"}
+          {open ? "Dölj" : "Detaljer"}
         </button>
       </div>
 
@@ -98,14 +98,14 @@ export default function SkattPanel({ txs, currency }: Props) {
       <div className="rounded-xl border border-green-200 bg-gradient-to-r from-green-50 to-emerald-50 p-4">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h2 className="text-lg font-bold text-slate-800">Skatt — Tax Deductions (2025)</h2>
+            <h2 className="text-lg font-bold text-slate-800">Skatt — Avdrag (2025)</h2>
             <p className="mt-0.5 text-sm text-slate-500">
-              Based on your transactions. Estimates only — verify with Skatteverket.
+              Baserat på dina transaktioner. Endast uppskattningar — verifiera med Skatteverket.
             </p>
           </div>
           {totalSaving > 0 && (
             <div className="text-right">
-              <div className="text-xs text-slate-500">Estimated total tax saving</div>
+              <div className="text-xs text-slate-500">Uppskattad total skattebesparing</div>
               <div className="text-2xl font-bold text-green-700">{fmt(totalSaving, currency)}</div>
             </div>
           )}
@@ -114,7 +114,7 @@ export default function SkattPanel({ txs, currency }: Props) {
 
       {deductions.length === 0 ? (
         <div className="rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-500">
-          No deductible transactions detected in this period.
+          Inga avdragsgilla transaktioner upptäckta under denna period.
         </div>
       ) : (
         <div className="grid gap-3">
@@ -127,7 +127,7 @@ export default function SkattPanel({ txs, currency }: Props) {
       <TaxChecklistPanel />
 
       <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs text-slate-500">
-        Estimates are pattern-based and indicative only. Always verify with Skatteverket or a tax advisor.
+        Uppskattningar är mönsterbaserade och endast vägledande. Verifiera alltid med Skatteverket eller en skatterådgivare.
       </div>
     </div>
   );

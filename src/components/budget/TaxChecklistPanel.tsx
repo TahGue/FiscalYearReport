@@ -11,28 +11,28 @@ interface ChecklistItem {
 const TAX_CHECKLIST: ChecklistItem[] = [
   {
     id: "commute",
-    label: "Reseavdrag evidence",
-    details: "Keep commuting receipts, pass statements, and yearly transport summaries.",
+    label: "Reseavdrag bevis",
+    details: "Spara kvitton för pendling, passerkort och årliga sammanställningar.",
   },
   {
     id: "interest",
-    label: "Interest statements (årsbesked)",
-    details: "Collect annual statements from lenders for exact deductible interest values.",
+    label: "Räntebesked (årsbesked)",
+    details: "Samla årsbesked från långivare för exakta avdragsgilla räntevärden.",
   },
   {
     id: "tools",
-    label: "Work tools invoice proof",
-    details: "Document work necessity and non-reimbursement from employer.",
+    label: "Arbetsverktygsfakturor",
+    details: "Dokumentera arbetsnödvändighet och att arbetsgivaren inte ersatt.",
   },
   {
     id: "akassa",
-    label: "Union/A-kassa reporting check",
-    details: "Verify automatic skattereduktion appears in your declaration.",
+    label: "Fack/A-kassa kontroll",
+    details: "Verifiera att automatisk skattereduktion visas i din deklaration.",
   },
   {
     id: "rot-rut",
-    label: "ROT/RUT invoice verification",
-    details: "Confirm labor deduction was applied and appears under Mina Sidor.",
+    label: "ROT/RUT fakturaverifiering",
+    details: "Bekräfta att arbetskostnadsavdrag applicerats och visas under Mina Sidor.",
   },
 ];
 
@@ -48,8 +48,8 @@ export default function TaxChecklistPanel() {
     <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
       <div className="mb-3 flex items-center justify-between gap-3">
         <div>
-          <h3 className="font-semibold text-slate-800">Tax filing readiness checklist</h3>
-          <p className="text-xs text-slate-500">Track proof quality before filing with Skatteverket.</p>
+          <h3 className="font-semibold text-slate-800">Checklista för deklarationsberedskap</h3>
+          <p className="text-xs text-slate-500">Spåra beviskvalitet innan du deklarerar hos Skatteverket.</p>
         </div>
         <span className="rounded bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700">
           {progress.done}/{progress.total} ({progress.pct}%)
