@@ -1,10 +1,12 @@
 export type TxType = "debit" | "credit";
+export type TxOwner = "self" | "partner";
 
 export interface Transaction {
   date: string;
   description: string;
   amount: number;
   type: TxType;
+  owner?: TxOwner;
   currency?: string;
   category?: string;
   account?: string;

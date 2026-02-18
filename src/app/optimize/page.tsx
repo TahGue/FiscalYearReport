@@ -1,26 +1,17 @@
 "use client";
 
+import FluctuationAlertsPanel from "@/components/budget/FluctuationAlertsPanel";
+import SavingsOpportunitiesPanel from "@/components/budget/SavingsOpportunitiesPanel";
 import SubscriptionOptimizerPanel from "@/components/budget/SubscriptionOptimizerPanel";
-import ScenarioComparisonPanel from "@/components/budget/ScenarioComparisonPanel";
-import WhatIfSimulatorPanel from "@/components/budget/WhatIfSimulatorPanel";
 import { useBudget } from "@/components/budget/BudgetProvider";
 
 export default function OptimizePage() {
-  const { filteredTxs, baseFilteredTxs, simulationScenario, setSimulationScenario, goals, currency } = useBudget();
+  const { filteredTxs, baseFilteredTxs, currency, budgetBands, bufferTargets } = useBudget();
+
   return (
     <div className="grid gap-4">
-      <WhatIfSimulatorPanel
-        baseTxs={baseFilteredTxs}
-        scenario={simulationScenario}
-        onChange={setSimulationScenario}
-        currency={currency}
-      />
-      <ScenarioComparisonPanel
-        baseTxs={baseFilteredTxs}
-        simulatedTxs={filteredTxs}
-        goals={goals}
-        currency={currency}
-      />
+      <SavingsOpportunitiesPanel txs={baseFilteredTxs} currency={currency} />
+      <FluctuationAlertsPanel txs={baseFilteredTxs} budgetBands={budgetBands} bufferTargets={bufferTargets} />
       <SubscriptionOptimizerPanel txs={filteredTxs} currency={currency} />
     </div>
   );

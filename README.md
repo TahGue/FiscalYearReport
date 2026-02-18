@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Financial Advisor (Next.js)
+
+A local-first personal finance app built with Next.js App Router.
+
+It focuses on practical budgeting insights from bank CSV exports, tax-oriented planning (`skatt`), and optimization workflows while keeping user data on-device.
+
+## Highlights
+
+- Dual CSV upload (self + partner) with owner-aware analysis
+- Household dashboard with Swedish copy, charts, and alerts
+- Fiscal-year comparison uploads (same-year or cross-year) with AI explanations
+- Spending pattern intelligence, fluctuation alerts, and buffer health tracking
+- Goals planner, subscription optimizer, and savings opportunities
+- Swedish tax (`skatt`) pages, checklists, and advisor context
+- AI Advisor with local data context + configurable providers (OpenAI, Ollama)
+- Privacy-first UX: all data stays in-browser with export/import backups
+
+## Tech Stack
+
+- Next.js 16 (App Router)
+- React 19
+- TypeScript
+- Tailwind CSS v4
+- Recharts
+- Papa Parse
+- Zod validation, Prisma-ready structure (schema-first workflow)
+
+## App Routes
+
+- `/` - Dashboard
+- `/optimize` - Optimization tools
+- `/goals` - Goals planner
+- `/skatt` - Tax planning view
+- `/ai` - AI advisor
+- `/settings` - App settings
 
 ## Getting Started
 
-First, run the development server:
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Start development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Open:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Available Scripts
 
-## Learn More
+```bash
+npm run dev    # Start local dev server
+npm run build  # Production build
+npm run start  # Run production server
+npm run lint   # Lint the codebase
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `src/app/*` - App Router pages
+- `src/components/budget/*` - Budget UI modules and panels
+- `src/lib/*` - Parsing, analysis, optimization, and AI helpers
+- `src/types/*` - Shared TypeScript types
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Notes
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Designed for Swedish households and supports local terminology.
+- Local-storage persistence by default; export backups via Settings → Data.
+- Keep sensitive financial exports out of version control.
+- Schema-first backlog targets Prisma + Postgres deployment (see ROADMAP).

@@ -1,27 +1,40 @@
 "use client";
 
 import Dashboard from "@/components/budget/Dashboard";
-import ScenarioComparisonPanel from "@/components/budget/ScenarioComparisonPanel";
-import WhatIfSimulatorPanel from "@/components/budget/WhatIfSimulatorPanel";
+import BufferHealthPanel from "@/components/budget/BufferHealthPanel";
+import ConjointAnalysisPanel from "@/components/budget/ConjointAnalysisPanel";
+import FluctuationAlertsPanel from "@/components/budget/FluctuationAlertsPanel";
+import SpendingPatternPanel from "@/components/budget/SpendingPatternPanel";
+import WeeklyDecisionPanel from "@/components/budget/WeeklyDecisionPanel";
 import { useBudget } from "@/components/budget/BudgetProvider";
 
 export default function HomePage() {
-  const { filteredTxs, baseFilteredTxs, simulationScenario, setSimulationScenario, goals, currency } = useBudget();
+  const {
+    filteredTxs,
+    baseFilteredTxs,
+    selfFilteredTxs,
+    partnerFilteredTxs,
+    hasPartnerData,
+    contributionModel,
+    budgetBands,
+    bufferTargets,
+    currency,
+  } = useBudget();
 
   return (
     <div className="grid gap-4">
-      <WhatIfSimulatorPanel
-        baseTxs={baseFilteredTxs}
-        scenario={simulationScenario}
-        onChange={setSimulationScenario}
-        currency={currency}
-      />
-      <ScenarioComparisonPanel
-        baseTxs={baseFilteredTxs}
-        simulatedTxs={filteredTxs}
-        goals={goals}
-        currency={currency}
-      />
+      {hasPartnerData && (
+        <ConjointAnalysisPanel
+          selfTxs={selfFilteredTxs}
+          partnerTxs={partnerFilteredTxs}
+          contributionModel={contributionModel}
+          currency={currency}
+        />
+      )}
+      <SpendingPatternPanel txs={baseFilteredTxs} currency={currency} />
+      <FluctuationAlertsPanel txs={baseFilteredTxs} budgetBands={budgetBands} bufferTargets={bufferTargets} />
+      <BufferHealthPanel txs={baseFilteredTxs} bufferTargets={bufferTargets} currency={currency} />
+      <WeeklyDecisionPanel txs={baseFilteredTxs} budgetBands={budgetBands} bufferTargets={bufferTargets} currency={currency} />
       <Dashboard txs={filteredTxs} currency={currency} />
     </div>
   );

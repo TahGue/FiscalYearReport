@@ -140,12 +140,14 @@ export function parseCSV(text: string): ParseResult {
     const rawBalance = getField(row, "balance");
     const balance = rawBalance ? toNumber(rawBalance) ?? undefined : undefined;
     const dateRaw = getField(row, "date2") || getField(row, "date") || "";
+    const normalizedDate = normalizeDate(dateRaw);
+    if (!normalizedDate) continue;
     const description = normalizeDescription(
       getField(row, "description") ?? getField(row, "type") ?? "Transaction",
     );
 
     txs.push({
-      date: normalizeDate(dateRaw),
+      date: normalizedDate,
       description,
       amount,
       type: amount >= 0 ? "credit" : "debit",
@@ -216,6 +218,16 @@ function normalizeDate(value: string): string {
   const trimmed = value.trim();
   if (!trimmed) return "";
 
+  const compactIso = trimmed.match(/^(\d{4})(\d{2})(\d{2})$/);
+  if (compactIso) {
+    return buildDate(compactIso[1], compactIso[2], compactIso[3]);
+  }
+
+  const compactDayFirst = trimmed.match(/^(\d{2})(\d{2})(\d{4})$/);
+  if (compactDayFirst) {
+    return buildDate(compactDayFirst[3], compactDayFirst[2], compactDayFirst[1]);
+  }
+
   const isoFirst = trimmed.match(/^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})/);
   if (isoFirst) {
     return buildDate(isoFirst[1], isoFirst[2], isoFirst[3]);
@@ -230,6 +242,7 @@ function normalizeDate(value: string): string {
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
+    .replace(/,/g, "")
     .match(/^(\d{1,2})\s+([a-z\u00e5\u00e4\u00f6]+)\s+(\d{2,4})/);
 
   if (textMatch) {
@@ -242,17 +255,29 @@ function normalizeDate(value: string): string {
   const parsed = Date.parse(trimmed);
   if (!Number.isNaN(parsed)) {
     const d = new Date(parsed);
-    return [d.getFullYear(), pad(d.getMonth() + 1), pad(d.getDate())].join("-");
+    const safe = buildDate(String(d.getFullYear()), String(d.getMonth() + 1), String(d.getDate()));
+    if (safe) return safe;
   }
 
-  return trimmed;
+  return "";
 }
 
 function buildDate(yearRaw: string, monthRaw: string, dayRaw: string): string {
   const year = normalizeYear(Number(yearRaw));
-  const month = pad(Number(monthRaw));
-  const day = pad(Number(dayRaw));
-  if (!year || !month || !day) return "";
+  const monthNum = Number(monthRaw);
+  const dayNum = Number(dayRaw);
+  if (!Number.isFinite(year) || !Number.isFinite(monthNum) || !Number.isFinite(dayNum)) return "";
+  if (monthNum < 1 || monthNum > 12) return "";
+  if (dayNum < 1 || dayNum > 31) return "";
+
+  const dt = new Date(Date.UTC(year, monthNum - 1, dayNum));
+  if (dt.getUTCFullYear() !== year || dt.getUTCMonth() !== monthNum - 1 || dt.getUTCDate() !== dayNum) {
+    return "";
+  }
+
+  const month = pad(monthNum);
+  const day = pad(dayNum);
+  if (!month || !day) return "";
   return `${year}-${month}-${day}`;
 }
 

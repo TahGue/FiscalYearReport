@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import HouseholdControlsPanel from "@/components/budget/HouseholdControlsPanel";
+import OnboardingPanel from "@/components/budget/OnboardingPanel";
 import TransactionUpload from "@/components/budget/TransactionUpload";
 import { useBudget } from "@/components/budget/BudgetProvider";
 
@@ -18,20 +20,20 @@ export default function BudgetShell({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const {
     txs,
+    hasPartnerData,
     currency,
     selectedMonth,
     availableMonths,
     filteredTxs,
-    simulationScenario,
+    viewScope,
+    contributionModel,
+    onboardingDismissed,
     setSelectedMonth,
-    loadParsedTransactions,
+    setOnboardingDismissed,
+    setViewScope,
+    setContributionModel,
+    loadParsedTransactionsByOwner,
   } = useBudget();
-
-  const scenarioActive =
-    simulationScenario.incomeMultiplier !== 100 ||
-    simulationScenario.spendingReductionPercent !== 0 ||
-    simulationScenario.oneTimeShock !== 0 ||
-    simulationScenario.canceledSubscriptions.length > 0;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-emerald-50/30">
@@ -43,7 +45,11 @@ export default function BudgetShell({ children }: { children: React.ReactNode })
       </header>
 
       <main className="mx-auto grid w-full max-w-6xl gap-5 px-4 py-6">
-        <TransactionUpload onParsed={loadParsedTransactions} />
+        {!onboardingDismissed && <OnboardingPanel onDismiss={() => setOnboardingDismissed(true)} />}
+        <TransactionUpload
+          onParsedSelf={(result) => loadParsedTransactionsByOwner("self", result)}
+          onParsedPartner={(result) => loadParsedTransactionsByOwner("partner", result)}
+        />
 
         {txs.length > 0 && (
           <>
@@ -68,14 +74,15 @@ export default function BudgetShell({ children }: { children: React.ReactNode })
                 <span className="text-xs text-slate-400">
                   {filteredTxs.length} transactions · {currency}
                 </span>
+                {hasPartnerData && <span className="text-xs font-medium text-emerald-600">Partner data linked</span>}
               </div>
-              {scenarioActive && (
-                <div className="flex flex-wrap items-center gap-2 text-xs">
-                  <span className="rounded bg-amber-100 px-2 py-1 font-semibold text-amber-800">What-if mode active</span>
-                  <span className="rounded bg-slate-100 px-2 py-1 text-slate-700">Income {simulationScenario.incomeMultiplier}%</span>
-                  <span className="rounded bg-slate-100 px-2 py-1 text-slate-700">Spend cut {simulationScenario.spendingReductionPercent}%</span>
-                </div>
-              )}
+              <HouseholdControlsPanel
+                hasPartnerData={hasPartnerData}
+                viewScope={viewScope}
+                contributionModel={contributionModel}
+                onScopeChange={setViewScope}
+                onContributionModelChange={setContributionModel}
+              />
             </div>
 
             <nav className="grid grid-cols-2 gap-2 rounded-xl border border-slate-200 bg-white p-2 md:grid-cols-3 lg:grid-cols-6">
