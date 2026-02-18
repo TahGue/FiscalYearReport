@@ -23,17 +23,17 @@ export default function BufferHealthPanel({ txs, bufferTargets, currency }: Prop
 
   return (
     <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-      <h3 className="text-base font-semibold text-slate-800">Buffer health</h3>
-      <p className="mt-1 text-sm text-slate-500">Recommended reserves to absorb volatility and irregular costs.</p>
+      <h3 className="text-base font-semibold text-slate-800">Buffert hälsa</h3>
+      <p className="mt-1 text-sm text-slate-500">Rekommenderade reserver för att absorbera volatilitet och oregelbundna kostnader.</p>
 
       <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-3">
         <Metric
-          label="Monthly volatility buffer"
+          label="Månatlig volatilitetsbuffert"
           value={fmt(monthlyNeed, currency)}
-          hint={`Current volatility index: ${volatility.toFixed(0)}%`}
+          hint={`Nuvarande volatilitetsindex: ${volatility.toFixed(0)}%`}
         />
-        <Metric label="Irregular expense fund" value={fmt(irregularNeed, currency)} hint="Covers repairs, travel, and seasonal spikes" />
-        <Metric label="Emergency fund" value={fmt(emergencyNeed, currency)} hint="Target 3-6 months of core living cost" />
+        <Metric label="Oregelbuden utgiftsfond" value={fmt(irregularNeed, currency)} hint="Täcker reparationer, resor och säsongsöppningar" />
+        <Metric label="Nödfond" value={fmt(emergencyNeed, currency)} hint="Mål: 3-6 månaders grundläggande levnadskostnader" />
       </div>
     </section>
   );

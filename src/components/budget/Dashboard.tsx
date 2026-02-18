@@ -77,9 +77,9 @@ export default function Dashboard({ txs, currency }: Props) {
   return (
     <div className="grid gap-6">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <Card title="Income" value={fmt(income, currency)} color="text-green-600" />
-        <Card title="Spending" value={fmt(spend, currency)} color="text-red-500" />
-        <Card title="Net" value={fmt(net, currency)} color={net >= 0 ? "text-green-600" : "text-red-500"} />
+        <Card title="Inkomst" value={fmt(income, currency)} color="text-green-600" />
+        <Card title="Utgifter" value={fmt(spend, currency)} color="text-red-500" />
+        <Card title="Netto" value={fmt(net, currency)} color={net >= 0 ? "text-green-600" : "text-red-500"} />
       </div>
 
       <HealthScorePanel txs={txs} />
@@ -87,7 +87,7 @@ export default function Dashboard({ txs, currency }: Props) {
       <CashflowForecastPanel txs={txs} currency={currency} />
 
       <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-        <h3 className="mb-2 font-semibold text-slate-800">Balance over time</h3>
+        <h3 className="mb-2 font-semibold text-slate-800">Saldo över tid</h3>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={series} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
@@ -100,7 +100,7 @@ export default function Dashboard({ txs, currency }: Props) {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
               <YAxis tickFormatter={(v) => `${v}`} />
-              <Tooltip formatter={(v) => formatTooltipValue(v, currency, "Balance")} />
+              <Tooltip formatter={(v) => formatTooltipValue(v, currency, "Saldo")} />
               <Area type="monotone" dataKey="balance" stroke="#16a34a" fillOpacity={1} fill="url(#balance)" />
             </AreaChart>
           </ResponsiveContainer>
@@ -109,7 +109,7 @@ export default function Dashboard({ txs, currency }: Props) {
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-          <h3 className="mb-3 font-semibold text-slate-800">Top spending by merchant</h3>
+          <h3 className="mb-3 font-semibold text-slate-800">Topp utgifter per handlare</h3>
           <div className="mb-3 h-48">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={merchantChartData} layout="vertical" margin={{ left: 0, right: 20 }}>
@@ -135,9 +135,9 @@ export default function Dashboard({ txs, currency }: Props) {
         </div>
 
         <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-          <h3 className="mb-2 font-semibold text-slate-800">Detected anomalies</h3>
+          <h3 className="mb-2 font-semibold text-slate-800">Upptäckta avvikelser</h3>
           {anomalies.length === 0 ? (
-            <p className="text-sm text-slate-500">No anomalies detected.</p>
+            <p className="text-sm text-slate-500">Inga avvikelser upptäckta.</p>
           ) : (
             <ul className="max-h-72 space-y-2 overflow-y-auto">
               {anomalies.map((a, i) => {
@@ -174,7 +174,7 @@ export default function Dashboard({ txs, currency }: Props) {
 
       {categoryData.length > 0 && (
         <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-          <h3 className="mb-3 font-semibold text-slate-800">Spending by category</h3>
+          <h3 className="mb-3 font-semibold text-slate-800">Utgifter per kategori</h3>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
@@ -212,7 +212,7 @@ export default function Dashboard({ txs, currency }: Props) {
 
       {recurring.length > 0 && (
         <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-          <h3 className="mb-2 font-semibold text-slate-800">Recurring payments detected</h3>
+          <h3 className="mb-2 font-semibold text-slate-800">Återkommande betalningar upptäckta</h3>
           <ul className="grid grid-cols-1 gap-2 md:grid-cols-2">
             {recurring.map((r) => (
               <li key={r.merchant} className="flex justify-between rounded border border-slate-200 px-3 py-2 text-sm">
@@ -224,7 +224,7 @@ export default function Dashboard({ txs, currency }: Props) {
                 </div>
                 <div className="text-right">
                   <div className="font-semibold text-red-500">{fmt(Math.abs(r.amount), currency)}</div>
-                  <div className="text-xs text-slate-400">{(Math.abs(r.amount) * 12).toFixed(0)} {currency}/yr</div>
+                  <div className="text-xs text-slate-400">{(Math.abs(r.amount) * 12).toFixed(0)} {currency}/år</div>
                 </div>
               </li>
             ))}

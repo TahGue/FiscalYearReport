@@ -49,16 +49,16 @@ export default function DataBackupPanel({ payload, onImport }: Props) {
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-      <h2 className="text-base font-semibold text-slate-800">Local backup / restore</h2>
-      <p className="mt-1 text-sm text-slate-500">Export your local data to JSON and restore it later on this device.</p>
+      <h2 className="text-base font-semibold text-slate-800">Lokal backup / återställning</h2>
+      <p className="mt-1 text-sm text-slate-500">Exportera dina lokala data till JSON och återställ dem senare på denna enhet.</p>
 
       <div className="mt-3 flex flex-wrap items-center gap-3">
         <button onClick={exportData} className="rounded bg-slate-900 px-3 py-1.5 text-sm font-semibold text-white">
-          Export backup JSON
+          Exportera backup JSON
         </button>
 
         <label className="cursor-pointer rounded border border-slate-300 px-3 py-1.5 text-sm text-slate-700">
-          Import backup JSON
+          Importera backup JSON
           <input
             type="file"
             accept="application/json"

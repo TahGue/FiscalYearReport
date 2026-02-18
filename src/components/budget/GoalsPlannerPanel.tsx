@@ -29,7 +29,7 @@ export default function GoalsPlannerPanel({ goals, setGoals, txs, currency }: Pr
       ...goals,
       {
         id: `goal-${Date.now()}`,
-        title: "New savings goal",
+        title: "Nytt sparmål",
         currentAmount: 0,
         targetAmount: 5000,
         targetDate: target.toISOString().slice(0, 10),
@@ -40,12 +40,12 @@ export default function GoalsPlannerPanel({ goals, setGoals, txs, currency }: Pr
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-bold text-slate-800">Goals Planner</h2>
+        <h2 className="text-lg font-bold text-slate-800">Målplanering</h2>
         <button onClick={addGoal} className="rounded bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white">
-          Add goal
+          Lägg till mål
         </button>
       </div>
-      <p className="mt-1 text-sm text-slate-500">Set deadlines and weekly targets based on your real cashflow.</p>
+      <p className="mt-1 text-sm text-slate-500">Sätt deadlines och veckomål baserat på ditt verkliga kassaflöde.</p>
 
       <div className="mt-3 space-y-3">
         {projections.map((entry) => (
@@ -77,10 +77,10 @@ export default function GoalsPlannerPanel({ goals, setGoals, txs, currency }: Pr
             </div>
 
             <div className="mt-2 flex flex-wrap gap-3 text-sm">
-              <Badge label="Remaining" value={fmt(entry.remaining, currency)} />
-              <Badge label="Days left" value={`${entry.daysLeft}`} />
-              <Badge label="Needed / week" value={fmt(entry.neededPerWeek, currency)} />
-              <Badge label="Status" value={entry.onTrack ? "On track" : "At risk"} tone={entry.onTrack ? "green" : "red"} />
+              <Badge label="Kvarstår" value={fmt(entry.remaining, currency)} />
+              <Badge label="Dagar kvar" value={`${entry.daysLeft}`} />
+              <Badge label="Behövs / vecka" value={fmt(entry.neededPerWeek, currency)} />
+              <Badge label="Status" value={entry.onTrack ? "På spåret" : "Risk"} tone={entry.onTrack ? "green" : "red"} />
             </div>
           </div>
         ))}

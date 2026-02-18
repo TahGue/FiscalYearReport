@@ -23,12 +23,12 @@ export default function RiskControlsSettingsPanel({ budgetBands, bufferTargets, 
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-      <h2 className="text-base font-semibold text-slate-800">Risk controls</h2>
-      <p className="mt-1 text-sm text-slate-500">Configure category budget bands and fluctuation buffers.</p>
+      <h2 className="text-base font-semibold text-slate-800">Riskkontroller</h2>
+      <p className="mt-1 text-sm text-slate-500">Konfigurera kategoribudgetband och fluktuationsbuffertar.</p>
 
       <div className="mt-3 grid gap-3 md:grid-cols-3">
         <label className="grid gap-1 text-sm text-slate-700">
-          <span>Monthly volatility buffer</span>
+          <span>Månatlig volatilitetsbuffert</span>
           <input
             type="number"
             value={bufferTargets.monthlyVolatility}
@@ -42,7 +42,7 @@ export default function RiskControlsSettingsPanel({ budgetBands, bufferTargets, 
           />
         </label>
         <label className="grid gap-1 text-sm text-slate-700">
-          <span>Irregular fund</span>
+          <span>Oregelbunden fond</span>
           <input
             type="number"
             value={bufferTargets.irregularFund}
@@ -56,7 +56,7 @@ export default function RiskControlsSettingsPanel({ budgetBands, bufferTargets, 
           />
         </label>
         <label className="grid gap-1 text-sm text-slate-700">
-          <span>Emergency fund</span>
+          <span>Nödfond</span>
           <input
             type="number"
             value={bufferTargets.emergencyFund}
@@ -71,7 +71,7 @@ export default function RiskControlsSettingsPanel({ budgetBands, bufferTargets, 
         </label>
       </div>
 
-      <h3 className="mt-4 text-sm font-semibold text-slate-800">Budget bands by category</h3>
+      <h3 className="mt-4 text-sm font-semibold text-slate-800">Budgetband per kategori</h3>
       <div className="mt-2 space-y-2">
         {resolvedBands.map((band, index) => (
           <div key={band.category} className="grid grid-cols-1 gap-2 rounded border border-slate-200 p-3 md:grid-cols-4">
@@ -92,7 +92,7 @@ export default function RiskControlsSettingsPanel({ budgetBands, bufferTargets, 
               value={band.target}
               onChange={(event) => updateBand(index, { target: Number(event.target.value) || 0 })}
               className="rounded border border-slate-300 px-2 py-1.5 text-sm"
-              placeholder="Target"
+              placeholder="Mål"
             />
             <input
               type="number"

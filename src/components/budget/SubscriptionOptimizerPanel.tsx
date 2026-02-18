@@ -87,36 +87,36 @@ export default function SubscriptionOptimizerPanel({ txs, currency }: Props) {
   return (
     <div className="grid gap-4">
       <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-        <h2 className="text-lg font-bold text-slate-800">Subscription Optimizer</h2>
-        <p className="mt-1 text-sm text-slate-500">Detect recurring charges and suggest cheaper/free swaps.</p>
+        <h2 className="text-lg font-bold text-slate-800">Prenumerationsoptimering</h2>
+        <p className="mt-1 text-sm text-slate-500">Upptäck återkommande kostnader och föreslå billigare/gratis alternativ.</p>
         <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-3">
-          <Metric title="Detected subscriptions" value={`${subscriptions.length}`} />
-          <Metric title="Estimated annual spend" value={fmt(totalAnnual, currency)} />
-          <Metric title="Potential optimized annual" value={fmt(optimizedAnnual, currency)} />
+          <Metric title="Upptäckta prenumerationer" value={`${subscriptions.length}`} />
+          <Metric title="Beräknad årlig kostnad" value={fmt(totalAnnual, currency)} />
+          <Metric title="Möjlig optimerad årlig" value={fmt(optimizedAnnual, currency)} />
         </div>
       </div>
 
       <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-        <h3 className="mb-2 font-semibold text-slate-800">Fix subscription grouping</h3>
+        <h3 className="mb-2 font-semibold text-slate-800">Fixa prenumerationsgruppering</h3>
         <p className="text-sm text-slate-500">
-          Add keywords to force include missed subscriptions or exclude wrongly grouped merchants.
+          Lägg till nyckelord för att tvinga in missade prenumerationer eller exkludera felaktigt grupperade handlare.
         </p>
 
         <div className="mt-3 grid gap-3 md:grid-cols-2">
           <div className="rounded-lg border border-emerald-200 bg-emerald-50/40 p-3">
-            <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">Force include</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">Tvinga inkludera</p>
             <div className="mt-2 flex gap-2">
               <input
                 value={includeInput}
                 onChange={(event) => setIncludeInput(event.target.value)}
-                placeholder="e.g. spotify"
+                placeholder="t.ex. spotify"
                 className="w-full rounded border border-emerald-300 bg-white px-2 py-1.5 text-sm text-slate-700"
               />
               <button
                 onClick={() => addOverride("forceInclude")}
                 className="rounded bg-emerald-700 px-3 py-1.5 text-xs font-semibold text-white"
               >
-                Add
+                Lägg till
               </button>
             </div>
             {overrides.forceInclude.length > 0 && (
@@ -135,19 +135,19 @@ export default function SubscriptionOptimizerPanel({ txs, currency }: Props) {
           </div>
 
           <div className="rounded-lg border border-rose-200 bg-rose-50/40 p-3">
-            <p className="text-xs font-semibold uppercase tracking-wide text-rose-700">Exclude</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-rose-700">Exkludera</p>
             <div className="mt-2 flex gap-2">
               <input
                 value={excludeInput}
                 onChange={(event) => setExcludeInput(event.target.value)}
-                placeholder="e.g. swish"
+                placeholder="t.ex. swish"
                 className="w-full rounded border border-rose-300 bg-white px-2 py-1.5 text-sm text-slate-700"
               />
               <button
                 onClick={() => addOverride("exclude")}
                 className="rounded bg-rose-700 px-3 py-1.5 text-xs font-semibold text-white"
               >
-                Add
+                Lägg till
               </button>
             </div>
             {overrides.exclude.length > 0 && (
@@ -168,9 +168,9 @@ export default function SubscriptionOptimizerPanel({ txs, currency }: Props) {
       </div>
 
       <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-        <h3 className="mb-2 font-semibold text-slate-800">Detected recurring subscriptions</h3>
+        <h3 className="mb-2 font-semibold text-slate-800">Upptäckta återkommande prenumerationer</h3>
         {subscriptions.length === 0 ? (
-          <p className="text-sm text-slate-500">No recurring subscriptions detected yet.</p>
+          <p className="text-sm text-slate-500">Inga återkommande prenumerationer upptäckta än.</p>
         ) : (
           <ul className="space-y-2">
             {subscriptions.map((sub) => (
@@ -179,12 +179,12 @@ export default function SubscriptionOptimizerPanel({ txs, currency }: Props) {
                   <div>
                     <p className="font-semibold text-slate-800">{sub.merchant}</p>
                     <p className="text-xs text-slate-500">
-                      {sub.frequency} · confidence {(sub.confidence * 100).toFixed(0)}%
+                      {sub.frequency} · konfidens {(sub.confidence * 100).toFixed(0)}%
                     </p>
                   </div>
                   <div className="text-right">
                     <p className="font-semibold text-red-600">{fmt(Math.abs(sub.amount), currency)}</p>
-                    <p className="text-xs text-slate-500">{fmt(sub.annualCost, currency)}/yr</p>
+                    <p className="text-xs text-slate-500">{fmt(sub.annualCost, currency)}/år</p>
                   </div>
                 </div>
               </li>
@@ -194,9 +194,9 @@ export default function SubscriptionOptimizerPanel({ txs, currency }: Props) {
       </div>
 
       <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-        <h3 className="mb-2 font-semibold text-slate-800">Suggested alternatives</h3>
+        <h3 className="mb-2 font-semibold text-slate-800">Föreslagna alternativ</h3>
         {alternatives.length === 0 ? (
-          <p className="text-sm text-slate-500">No catalog matches yet. Add more known services to get swap suggestions.</p>
+          <p className="text-sm text-slate-500">Inga katalogmatchningar än. Lägg till fler kända tjänster för att få bytesförslag.</p>
         ) : (
           <ul className="space-y-2">
             {alternatives.map((alt) => {
@@ -209,7 +209,7 @@ export default function SubscriptionOptimizerPanel({ txs, currency }: Props) {
                       <p className="text-xs text-slate-600">{alt.notes}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold text-emerald-700">Save {fmt(yearlySaving, currency)}/yr</p>
+                      <p className="font-semibold text-emerald-700">Spara {fmt(yearlySaving, currency)}/år</p>
                       <p className="text-xs text-slate-500">{alt.type.replace("_", " ")}</p>
                     </div>
                   </div>

@@ -100,50 +100,50 @@ export default function ConjointAnalysisPanel({ selfTxs, partnerTxs, contributio
     <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h3 className="text-base font-semibold text-slate-800">Conjoint analysis</h3>
+          <h3 className="text-base font-semibold text-slate-800">Gemensam analys</h3>
           <p className="mt-1 text-sm text-slate-500">
-            Compare spending behavior between you and your partner to align household decisions.
+            Jämför utgiftsbeteende mellan dig och din partner för att anpassa hushållsbeslut.
           </p>
         </div>
         <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-right">
-          <div className="text-xs uppercase tracking-wide text-emerald-700">Alignment score</div>
+          <div className="text-xs uppercase tracking-wide text-emerald-700">Anpassningspoäng</div>
           <div className="text-xl font-bold text-emerald-800">{alignmentScore.toFixed(0)}%</div>
         </div>
       </div>
 
       <div className="mt-4 grid gap-3 md:grid-cols-3">
         <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
-          <div className="text-xs uppercase tracking-wide text-slate-500">Household spend</div>
+          <div className="text-xs uppercase tracking-wide text-slate-500">Hushållsutgifter</div>
           <div className="mt-1 text-lg font-semibold text-slate-900">{formatAmount(householdSpend, currency)}</div>
         </div>
         <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
-          <div className="text-xs uppercase tracking-wide text-slate-500">Your transactions</div>
+          <div className="text-xs uppercase tracking-wide text-slate-500">Dina transaktioner</div>
           <div className="mt-1 text-lg font-semibold text-slate-900">{selfTxs.length}</div>
         </div>
         <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
-          <div className="text-xs uppercase tracking-wide text-slate-500">Partner transactions</div>
+          <div className="text-xs uppercase tracking-wide text-slate-500">Partners transaktioner</div>
           <div className="mt-1 text-lg font-semibold text-slate-900">{partnerTxs.length}</div>
         </div>
       </div>
 
       <div className="mt-3 rounded-lg border border-blue-200 bg-blue-50/50 p-3 text-sm text-slate-700">
-        <p className="font-medium text-slate-800">Suggested shared-cost contribution ({contributionModel.replace("_", " ")})</p>
+        <p className="font-medium text-slate-800">Föreslaget delat kostnadsbidrag ({contributionModel.replace("_", " ")})</p>
         <p className="mt-1">
-          Self: {(contribution.selfShare * 100).toFixed(0)}% · Partner: {(contribution.partnerShare * 100).toFixed(0)}%
+          Jag: {(contribution.selfShare * 100).toFixed(0)}% · Partner: {(contribution.partnerShare * 100).toFixed(0)}%
         </p>
       </div>
 
       <div className="mt-4 grid gap-3 lg:grid-cols-2">
         <div className="rounded-lg border border-slate-200 p-3">
-          <h4 className="text-sm font-semibold text-slate-800">Shared priorities</h4>
+          <h4 className="text-sm font-semibold text-slate-800">Delade prioriteringar</h4>
           {alignedPriorities.length === 0 ? (
-            <p className="mt-2 text-sm text-slate-500">No strong shared category yet. Upload more months for better signal.</p>
+            <p className="mt-2 text-sm text-slate-500">Ingen stark delad kategori ännu. Ladda upp fler månader för bättre signal.</p>
           ) : (
             <ul className="mt-2 space-y-1 text-sm text-slate-700">
               {alignedPriorities.map((row) => (
                 <li key={row.category} className="flex items-center justify-between">
                   <span>{row.category}</span>
-                  <span className="font-medium">{(row.householdShare * 100).toFixed(0)}% of household spend</span>
+                  <span className="font-medium">{(row.householdShare * 100).toFixed(0)}% av hushållsutgifterna</span>
                 </li>
               ))}
             </ul>
@@ -151,15 +151,15 @@ export default function ConjointAnalysisPanel({ selfTxs, partnerTxs, contributio
         </div>
 
         <div className="rounded-lg border border-amber-200 bg-amber-50/40 p-3">
-          <h4 className="text-sm font-semibold text-slate-800">Divergence hotspots</h4>
+          <h4 className="text-sm font-semibold text-slate-800">Divergensvarmaste</h4>
           {divergenceHotspots.length === 0 ? (
-            <p className="mt-2 text-sm text-slate-500">Great balance: no major category divergence detected.</p>
+            <p className="mt-2 text-sm text-slate-500">Bra balans: ingen större kategoridivergens upptäckt.</p>
           ) : (
             <ul className="mt-2 space-y-1 text-sm text-slate-700">
               {divergenceHotspots.map((row) => (
                 <li key={row.category} className="flex items-center justify-between">
                   <span>{row.category}</span>
-                  <span className="font-medium">{(row.shareGap * 100).toFixed(0)} pts gap</span>
+                  <span className="font-medium">{(row.shareGap * 100).toFixed(0)} pkn differens</span>
                 </li>
               ))}
             </ul>
@@ -171,11 +171,11 @@ export default function ConjointAnalysisPanel({ selfTxs, partnerTxs, contributio
         <table className="min-w-full divide-y divide-slate-200 text-sm">
           <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
             <tr>
-              <th className="px-3 py-2">Category</th>
-              <th className="px-3 py-2">You</th>
+              <th className="px-3 py-2">Kategori</th>
+              <th className="px-3 py-2">Jag</th>
               <th className="px-3 py-2">Partner</th>
-              <th className="px-3 py-2">Household</th>
-              <th className="px-3 py-2">Gap</th>
+              <th className="px-3 py-2">Hushåll</th>
+              <th className="px-3 py-2">Differens</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 bg-white text-slate-700">
@@ -189,7 +189,7 @@ export default function ConjointAnalysisPanel({ selfTxs, partnerTxs, contributio
                   {formatAmount(row.partnerAmount, currency)} <span className="text-slate-400">({(row.partnerShare * 100).toFixed(0)}%)</span>
                 </td>
                 <td className="px-3 py-2 font-medium">{formatAmount(row.householdAmount, currency)}</td>
-                <td className="px-3 py-2">{(row.shareGap * 100).toFixed(0)} pts</td>
+                <td className="px-3 py-2">{(row.shareGap * 100).toFixed(0)} pkn</td>
               </tr>
             ))}
           </tbody>

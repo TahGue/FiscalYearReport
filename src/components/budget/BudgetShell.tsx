@@ -8,12 +8,12 @@ import TransactionUpload from "@/components/budget/TransactionUpload";
 import { useBudget } from "@/components/budget/BudgetProvider";
 
 const tabs = [
-  { href: "/", label: "Dashboard", emoji: "📊" },
-  { href: "/optimize", label: "Optimize", emoji: "💡" },
-  { href: "/goals", label: "Goals", emoji: "🎯" },
+  { href: "/", label: "Översikt", emoji: "📊" },
+  { href: "/optimize", label: "Optimera", emoji: "💡" },
+  { href: "/goals", label: "Mål", emoji: "🎯" },
   { href: "/skatt", label: "Skatt", emoji: "🧾" },
-  { href: "/ai", label: "AI Advisor", emoji: "🤖" },
-  { href: "/settings", label: "Settings", emoji: "⚙️" },
+  { href: "/ai", label: "AI Rådgivare", emoji: "🤖" },
+  { href: "/settings", label: "Inställningar", emoji: "⚙️" },
 ];
 
 export default function BudgetShell({ children }: { children: React.ReactNode }) {
@@ -39,8 +39,8 @@ export default function BudgetShell({ children }: { children: React.ReactNode })
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-emerald-50/30">
       <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/95 backdrop-blur">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3">
-          <h1 className="text-lg font-bold text-slate-800">Budget Consultation</h1>
-          <span className="text-xs text-slate-500">Private · Local · Insightful</span>
+          <h1 className="text-lg font-bold text-slate-800">Budget Rådgivning</h1>
+          <span className="text-xs text-slate-500">Privat · Lokal · Insiktsfull</span>
         </div>
       </header>
 
@@ -64,7 +64,7 @@ export default function BudgetShell({ children }: { children: React.ReactNode })
                   onChange={(e) => setSelectedMonth(e.target.value)}
                   className="rounded border border-slate-300 bg-white px-2 py-1 text-sm"
                 >
-                  <option value="all">All time</option>
+                  <option value="all">All tid</option>
                   {availableMonths.map((m) => (
                     <option key={m} value={m}>
                       {m}
@@ -72,9 +72,9 @@ export default function BudgetShell({ children }: { children: React.ReactNode })
                   ))}
                 </select>
                 <span className="text-xs text-slate-400">
-                  {filteredTxs.length} transactions · {currency}
+                  {filteredTxs.length} transaktioner · {currency}
                 </span>
-                {hasPartnerData && <span className="text-xs font-medium text-emerald-600">Partner data linked</span>}
+                {hasPartnerData && <span className="text-xs font-medium text-emerald-600">Partnerdata länkad</span>}
               </div>
               <HouseholdControlsPanel
                 hasPartnerData={hasPartnerData}
@@ -109,15 +109,15 @@ export default function BudgetShell({ children }: { children: React.ReactNode })
 
         {txs.length === 0 && (
           <div className="rounded-xl border border-slate-200 bg-white p-8 text-center shadow-sm">
-            <h2 className="text-xl font-semibold text-slate-800">Start by uploading your transaction CSV</h2>
+            <h2 className="text-xl font-semibold text-slate-800">Börja med att ladda upp din transaktions-CSV</h2>
             <p className="mt-2 text-sm text-slate-500">
-              Supports Swedbank exports and Windows-1252 Swedish characters. Your data stays on-device.
+              Stödjer Swedbank-export och Windows-1252 svenska tecken. Dina data stannar på enheten.
             </p>
           </div>
         )}
       </main>
 
-      <footer className="py-6 text-center text-xs text-slate-400">Your financial data stays on-device</footer>
+      <footer className="py-6 text-center text-xs text-slate-400">Dina finansiella data stannar på enheten</footer>
     </div>
   );
 }

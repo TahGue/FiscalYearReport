@@ -16,11 +16,11 @@ export default function FluctuationAlertsPanel({ txs, budgetBands, bufferTargets
 
   return (
     <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-      <h3 className="text-base font-semibold text-slate-800">Fluctuation alerts</h3>
-      <p className="mt-1 text-sm text-slate-500">Early warnings when spending drifts outside normal bands.</p>
+      <h3 className="text-base font-semibold text-slate-800">Fluktuationsvarningar</h3>
+      <p className="mt-1 text-sm text-slate-500">Tidiga varningar när utgifterna avviker från normala intervall.</p>
 
       {alerts.length === 0 ? (
-        <p className="mt-3 text-sm text-emerald-700">No active alert. Spending is currently within expected ranges.</p>
+        <p className="mt-3 text-sm text-emerald-700">Inga aktiva varningar. Utgifterna är för närvarande inom förväntade intervall.</p>
       ) : (
         <ul className="mt-3 space-y-2">
           {alerts.map((alert) => (

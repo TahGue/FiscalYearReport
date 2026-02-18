@@ -21,29 +21,29 @@ export default function SpendingPatternPanel({ txs, currency }: Props) {
     <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h3 className="text-base font-semibold text-slate-800">Frequent vs irregular spending</h3>
-          <p className="mt-1 text-sm text-slate-500">Identify stable categories, spikes, and recommended sinking-fund levels.</p>
+          <h3 className="text-base font-semibold text-slate-800">Frekventa vs oregelbundna utgifter</h3>
+          <p className="mt-1 text-sm text-slate-500">Identifiera stabila kategorier, toppar och rekommenderade buffertnivåer.</p>
         </div>
         <div className="grid grid-cols-2 gap-2 text-xs">
-          <Badge label="Frequent" value={`${frequent.length}`} tone="emerald" />
-          <Badge label="Irregular" value={`${irregular.length}`} tone="amber" />
+          <Badge label="Frekventa" value={`${frequent.length}`} tone="emerald" />
+          <Badge label="Oregelbundna" value={`${irregular.length}`} tone="amber" />
         </div>
       </div>
 
       {patterns.length === 0 ? (
-        <p className="mt-3 text-sm text-slate-500">Upload at least one month of spending data to compute patterns.</p>
+        <p className="mt-3 text-sm text-slate-500">Ladda upp minst en månads utgiftsdata för att beräkna mönster.</p>
       ) : (
         <div className="mt-4 overflow-x-auto rounded-lg border border-slate-200">
           <table className="min-w-full divide-y divide-slate-200 text-sm">
             <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
               <tr>
-                <th className="px-3 py-2">Category</th>
-                <th className="px-3 py-2">Type</th>
-                <th className="px-3 py-2">Stability</th>
-                <th className="px-3 py-2">Baseline (avg)</th>
-                <th className="px-3 py-2">Current month</th>
+                <th className="px-3 py-2">Kategori</th>
+                <th className="px-3 py-2">Typ</th>
+                <th className="px-3 py-2">Stabilitet</th>
+                <th className="px-3 py-2">Baslinje (snitt)</th>
+                <th className="px-3 py-2">Nuvarande månad</th>
                 <th className="px-3 py-2">Delta</th>
-                <th className="px-3 py-2">Suggested fund</th>
+                <th className="px-3 py-2">Föreslagen buffert</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 bg-white text-slate-700">
@@ -56,7 +56,7 @@ export default function SpendingPatternPanel({ txs, currency }: Props) {
                         pattern.classification === "frequent" ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"
                       }`}
                     >
-                      {pattern.classification}
+                      {pattern.classification === "frequent" ? "Frekvent" : "Oregelbunden"}
                     </span>
                   </td>
                   <td className="px-3 py-2">{pattern.stabilityScore.toFixed(0)}%</td>

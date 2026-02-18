@@ -25,7 +25,7 @@ export default function TransactionUpload({ onParsedSelf, onParsedPartner }: Pro
     const files = Array.from(e.target.files ?? []);
     if (files.length === 0) return;
 
-    setStatus(owner === "self" ? "Parsing your transactions..." : "Parsing partner transactions...");
+    setStatus(owner === "self" ? "Analyserar dina transaktioner..." : "Analyserar partnerns transaktioner...");
     try {
       const buffers = await Promise.all(files.map((f) => f.arrayBuffer()));
       const parsed = buffers.map((buf) => parseCSVBuffer(new Uint8Array(buf)));
@@ -35,10 +35,10 @@ export default function TransactionUpload({ onParsedSelf, onParsedPartner }: Pro
       };
       onParsed(merged);
       setStatus(
-        `Loaded ${merged.transactions.length} ${owner === "self" ? "your" : "partner"} transactions from ${files.length} file(s).`,
+        `Laddade ${merged.transactions.length} ${owner === "self" ? "dina" : "partnerns"} transaktioner från ${files.length} fil(er).`,
       );
     } catch (err) {
-      setStatus(err instanceof Error ? err.message : "Failed to parse file");
+      setStatus(err instanceof Error ? err.message : "Kunde inte läsa filen");
     } finally {
       if (inputRef.current) inputRef.current.value = "";
     }
@@ -46,13 +46,13 @@ export default function TransactionUpload({ onParsedSelf, onParsedPartner }: Pro
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-      <h2 className="text-base font-semibold text-slate-800">Upload household bank transactions (CSV)</h2>
-      <p className="mt-1 text-sm text-slate-500">Add your CSV and your partner&apos;s CSV to enable conjoint analysis.</p>
+      <h2 className="text-base font-semibold text-slate-800">Ladda upp hushållens banktransaktioner (CSV)</h2>
+      <p className="mt-1 text-sm text-slate-500">Lägg till din CSV och din partners CSV för att aktivera gemensam analys.</p>
 
       <div className="mt-3 grid gap-3 md:grid-cols-2">
         <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
           <label className="text-sm font-medium text-slate-700" htmlFor="self-csv-upload">
-            Your transactions
+            Dina transaktioner
           </label>
           <input
             id="self-csv-upload"
@@ -72,7 +72,7 @@ export default function TransactionUpload({ onParsedSelf, onParsedPartner }: Pro
 
         <div className="rounded-lg border border-emerald-200 bg-emerald-50/40 p-3">
           <label className="text-sm font-medium text-slate-700" htmlFor="partner-csv-upload">
-            Partner transactions (optional)
+            Partners transaktioner (valfritt)
           </label>
           <input
             id="partner-csv-upload"
