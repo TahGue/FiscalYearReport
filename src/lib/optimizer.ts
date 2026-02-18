@@ -61,6 +61,11 @@ export interface HealthScore {
   recommendations: string[];
 }
 
+export interface SubscriptionDetectionOptions {
+  exclude?: string[];
+  forceInclude?: string[];
+}
+
 export interface SimulationScenario {
   incomeMultiplier: number;
   spendingReductionPercent: number;
@@ -199,12 +204,15 @@ export function findSubscriptionAlternatives(candidates: SubscriptionCandidate[]
   return alternativeCatalog.filter((item) => names.includes(item.service.toLowerCase().split(" ")[0]));
 }
 
-export function detectSubscriptions(txs: Transaction[]): SubscriptionCandidate[] {
+export function detectSubscriptions(txs: Transaction[], options: SubscriptionDetectionOptions = {}): SubscriptionCandidate[] {
+  const excludedPatterns = (options.exclude ?? []).map(normalizeMerchant).filter(Boolean);
+  const includePatterns = (options.forceInclude ?? []).map(normalizeMerchant).filter(Boolean);
   const debits = txs.filter((t) => t.amount < 0);
   const byMerchant = new Map<string, Transaction[]>();
   for (const t of debits) {
     const key = normalizeMerchant(t.description);
     if (!key) continue;
+    if (matchesAnyPattern(key, excludedPatterns)) continue;
     const list = byMerchant.get(key) ?? [];
     list.push(t);
     byMerchant.set(key, list);
@@ -250,6 +258,44 @@ export function detectSubscriptions(txs: Transaction[]): SubscriptionCandidate[]
       category: categorize(merchant),
       transactions: sorted,
     });
+  }
+
+  const existingMerchants = new Set(out.map((item) => item.merchant));
+  if (includePatterns.length > 0) {
+    const forcedMerchants = Array.from(byMerchant.entries()).filter(([merchant]) =>
+      matchesAnyPattern(merchant, includePatterns),
+    );
+
+    for (const [merchant, list] of forcedMerchants) {
+      if (existingMerchants.has(merchant) || list.length === 0) continue;
+      const sorted = list
+        .slice()
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      const amountAbs = sorted.map((t) => Math.abs(t.amount));
+      const avg = mean(amountAbs);
+      const gaps: number[] = [];
+      for (let i = 1; i < sorted.length; i++) {
+        const days =
+          Math.abs(new Date(sorted[i].date).getTime() - new Date(sorted[i - 1].date).getTime()) /
+          (1000 * 60 * 60 * 24);
+        gaps.push(days);
+      }
+      const medGap = gaps.length > 0 ? median(gaps) : 30;
+      const frequency = classifyFrequency(medGap) ?? "monthly";
+      const annualMultiplier =
+        frequency === "weekly" ? 52 : frequency === "biweekly" ? 26 : frequency === "monthly" ? 12 : 4;
+
+      out.push({
+        merchant,
+        amount: -avg,
+        frequency,
+        annualCost: avg * annualMultiplier,
+        confidence: list.length >= 3 ? 0.7 : list.length === 2 ? 0.6 : 0.55,
+        category: categorize(merchant),
+        transactions: sorted,
+      });
+      existingMerchants.add(merchant);
+    }
   }
 
   return out.sort((a, b) => b.annualCost - a.annualCost).slice(0, 12);
@@ -369,6 +415,10 @@ function anomalyProxy(txs: Transaction[]): number {
 
 function normalizeMerchant(desc: string): string {
   return desc.toLowerCase().replace(/[^a-z0-9]/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function matchesAnyPattern(value: string, patterns: string[]): boolean {
+  return patterns.some((pattern) => pattern && (value.includes(pattern) || pattern.includes(value)));
 }
 
 function classifyFrequency(days: number): SubscriptionCandidate["frequency"] | null {
