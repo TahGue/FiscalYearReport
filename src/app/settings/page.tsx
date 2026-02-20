@@ -5,6 +5,7 @@ import AISettingsPanel from "@/components/budget/AISettings";
 import CategoryOverride from "@/components/budget/CategoryOverride";
 import DataBackupPanel from "@/components/budget/DataBackupPanel";
 import RiskControlsSettingsPanel from "@/components/budget/RiskControlsSettingsPanel";
+import SwedishSettingsPanel from "@/components/budget/SwedishSettingsPanel";
 import { useBudget } from "@/components/budget/BudgetProvider";
 
 export default function SettingsPage() {
@@ -22,8 +23,10 @@ export default function SettingsPage() {
     budgetBands,
     bufferTargets,
     goals,
+    swedenSettings,
     setBudgetBands,
     setBufferTargets,
+    setSwedenSettings,
     restoreFromBackup,
   } = useBudget();
   const [showCategoryEditor, setShowCategoryEditor] = useState(false);
@@ -31,6 +34,7 @@ export default function SettingsPage() {
   return (
     <div className="grid gap-4">
       <AISettingsPanel settings={aiSettings} onChange={setAISettings} />
+      <SwedishSettingsPanel settings={swedenSettings} onChange={setSwedenSettings} />
       <RiskControlsSettingsPanel
         budgetBands={budgetBands}
         bufferTargets={bufferTargets}
@@ -51,6 +55,7 @@ export default function SettingsPage() {
           bufferTargets,
           goals,
           aiSettings,
+          swedenSettings,
         }}
         onImport={restoreFromBackup}
       />

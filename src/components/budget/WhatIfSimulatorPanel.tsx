@@ -45,7 +45,7 @@ const SNAPSHOTS_KEY = "budget-consultation-scenario-snapshots";
 const builtInPresets: ScenarioPreset[] = [
   {
     id: "job-loss",
-    name: "Job loss stress test",
+    name: "Jobbförlust stress-test",
     scenario: {
       incomeMultiplier: 55,
       spendingReductionPercent: 12,
@@ -55,7 +55,7 @@ const builtInPresets: ScenarioPreset[] = [
   },
   {
     id: "frugal-mode",
-    name: "Frugal mode",
+    name: "Sparläge",
     scenario: {
       incomeMultiplier: 100,
       spendingReductionPercent: 20,
@@ -65,7 +65,7 @@ const builtInPresets: ScenarioPreset[] = [
   },
   {
     id: "aggressive-savings",
-    name: "Aggressive savings sprint",
+    name: "Aggressiv sparspurt",
     scenario: {
       incomeMultiplier: 108,
       spendingReductionPercent: 28,
@@ -165,7 +165,7 @@ export default function WhatIfSimulatorPanel({ baseTxs, scenario, onChange, curr
   const saveCurrentAsPreset = () => {
     const name = newPresetName.trim();
     if (!name) return;
-    const safeName = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "preset";
+    const safeName = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "mall";
     const next = [
       ...customPresets,
       {
@@ -192,7 +192,7 @@ export default function WhatIfSimulatorPanel({ baseTxs, scenario, onChange, curr
     try {
       const parsed = JSON.parse(importPayload) as ScenarioPreset[];
       if (!Array.isArray(parsed)) {
-        setImportError("Import payload must be a JSON array of presets.");
+        setImportError("Importdata måste vara en JSON-lista med scenarier.");
         return;
       }
 
@@ -222,7 +222,7 @@ export default function WhatIfSimulatorPanel({ baseTxs, scenario, onChange, curr
       localStorage.setItem(PRESETS_KEY, JSON.stringify(merged));
       setImportPayload("");
     } catch {
-      setImportError("Invalid JSON payload.");
+      setImportError("Ogiltig JSON-data.");
     }
   };
 
@@ -235,7 +235,7 @@ export default function WhatIfSimulatorPanel({ baseTxs, scenario, onChange, curr
     const next: ScenarioSnapshot[] = [
       {
         id: `snapshot-${run}`,
-        createdAt: `Run ${run}`,
+        createdAt: `Körning ${run}`,
         scenario: { ...scenario, canceledSubscriptions: [...scenario.canceledSubscriptions] },
         estimatedSubscriptionSavePerMonth: estimatedMonthlySubscriptionSave,
       },
@@ -249,16 +249,16 @@ export default function WhatIfSimulatorPanel({ baseTxs, scenario, onChange, curr
     <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h2 className="text-lg font-bold text-slate-800">What-If Simulator</h2>
-          <p className="mt-1 text-sm text-slate-500">Model income changes, spending cuts, canceled subscriptions, and one-time shocks.</p>
+          <h2 className="text-lg font-bold text-slate-800">What-If-simulator</h2>
+          <p className="mt-1 text-sm text-slate-500">Modellera inkomstförändringar, utgiftsminskningar, avslutade prenumerationer och engångschocker.</p>
         </div>
         <button onClick={resetScenario} className="rounded bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700 hover:bg-slate-200">
-          Reset
+          Återställ
         </button>
       </div>
 
       <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
-        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Scenario presets</p>
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Scenariomallar</p>
         <div className="mt-2 flex flex-wrap gap-2">
           {presetList.map((preset) => {
             const isCustom = preset.id.startsWith("custom-");
@@ -287,32 +287,32 @@ export default function WhatIfSimulatorPanel({ baseTxs, scenario, onChange, curr
             value={newPresetName}
             onChange={(e) => setNewPresetName(e.target.value)}
             className="w-full rounded border border-slate-300 px-2 py-1.5 text-sm"
-            placeholder="Save current scenario as preset"
+            placeholder="Spara aktuellt scenario som mall"
           />
           <button
             onClick={saveCurrentAsPreset}
             className="rounded bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white"
           >
-            Save
+            Spara
           </button>
         </div>
       </div>
 
       <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
-        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Preset impact preview</p>
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Effektöversikt för mallar</p>
         <div className="mt-2 grid grid-cols-1 gap-2 md:grid-cols-2">
           {presetImpacts.map((impact) => (
             <div key={impact.id} className="rounded border border-slate-200 bg-white p-2 text-xs">
               <p className="font-semibold text-slate-800">{impact.name}</p>
               <p className={impact.netDelta >= 0 ? "text-emerald-700" : "text-red-700"}>
-                Net delta: {fmtAmount(impact.netDelta, currency)}
+                Nettodelta: {fmtAmount(impact.netDelta, currency)}
               </p>
               <p className={impact.forecast90Delta >= 0 ? "text-emerald-700" : "text-red-700"}>
-                90d forecast delta: {fmtAmount(impact.forecast90Delta, currency)}
+                90-d prognosdelta: {fmtAmount(impact.forecast90Delta, currency)}
               </p>
               <p className={impact.healthDelta >= 0 ? "text-emerald-700" : "text-red-700"}>
-                Health delta: {impact.healthDelta >= 0 ? "+" : ""}
-                {impact.healthDelta.toFixed(0)} pts
+                Hälsodelta: {impact.healthDelta >= 0 ? "+" : ""}
+                {impact.healthDelta.toFixed(0)} p
               </p>
             </div>
           ))}
@@ -320,7 +320,7 @@ export default function WhatIfSimulatorPanel({ baseTxs, scenario, onChange, curr
       </div>
 
       <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
-        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Export / Import custom presets</p>
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Exportera/importera egna mallar</p>
         <textarea
           value={exportPresets}
           readOnly
@@ -331,7 +331,7 @@ export default function WhatIfSimulatorPanel({ baseTxs, scenario, onChange, curr
           value={importPayload}
           onChange={(e) => setImportPayload(e.target.value)}
           rows={4}
-          placeholder="Paste preset JSON array here"
+          placeholder="Klistra in JSON-lista med mallar här"
           className="mt-2 w-full rounded border border-slate-300 bg-white px-2 py-1.5 font-mono text-xs text-slate-700"
         />
         <div className="mt-2 flex items-center gap-2">
@@ -339,7 +339,7 @@ export default function WhatIfSimulatorPanel({ baseTxs, scenario, onChange, curr
             onClick={importPresets}
             className="rounded bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white"
           >
-            Import presets
+            Importera mallar
           </button>
           {importError && <span className="text-xs text-red-600">{importError}</span>}
         </div>
@@ -347,7 +347,7 @@ export default function WhatIfSimulatorPanel({ baseTxs, scenario, onChange, curr
 
       <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-3">
         <label className="grid gap-1 text-sm text-slate-700">
-          <span>Income multiplier: {scenario.incomeMultiplier}%</span>
+          <span>Inkomstmultiplikator: {scenario.incomeMultiplier}%</span>
           <input
             type="range"
             min={50}
@@ -358,7 +358,7 @@ export default function WhatIfSimulatorPanel({ baseTxs, scenario, onChange, curr
         </label>
 
         <label className="grid gap-1 text-sm text-slate-700">
-          <span>Spending reduction: {scenario.spendingReductionPercent}%</span>
+          <span>Utgiftsminskning: {scenario.spendingReductionPercent}%</span>
           <input
             type="range"
             min={0}
@@ -369,21 +369,21 @@ export default function WhatIfSimulatorPanel({ baseTxs, scenario, onChange, curr
         </label>
 
         <label className="grid gap-1 text-sm text-slate-700">
-          <span>One-time shock ({currency})</span>
+          <span>Engångsschock ({currency})</span>
           <input
             type="number"
             value={scenario.oneTimeShock}
             onChange={(e) => set("oneTimeShock", Number(e.target.value) || 0)}
             className="rounded border border-slate-300 px-2 py-1.5"
-            placeholder="-5000 or 3000"
+            placeholder="-5000 eller 3000"
           />
         </label>
       </div>
 
       <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
-        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Cancel subscriptions in simulation</p>
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Avsluta prenumerationer i simuleringen</p>
         {subscriptions.length === 0 ? (
-          <p className="mt-2 text-sm text-slate-500">No recurring subscriptions detected for this period.</p>
+          <p className="mt-2 text-sm text-slate-500">Inga återkommande prenumerationer upptäckta för denna period.</p>
         ) : (
           <div className="mt-2 grid grid-cols-1 gap-2 md:grid-cols-2">
             {subscriptions.map((s) => {
@@ -392,7 +392,7 @@ export default function WhatIfSimulatorPanel({ baseTxs, scenario, onChange, curr
                 <label key={s.merchant} className="flex items-center justify-between gap-2 rounded border border-slate-200 bg-white px-2 py-1.5 text-sm">
                   <span className="truncate text-slate-700">{s.merchant}</span>
                   <span className="flex items-center gap-2">
-                    <span className="text-xs text-slate-500">{fmtAmount(s.amount, currency)}/mo</span>
+                    <span className="text-xs text-slate-500">{fmtAmount(s.amount, currency)}/mån</span>
                     <input type="checkbox" checked={checked} onChange={() => toggleSubscription(s.merchant)} />
                   </span>
                 </label>
@@ -404,29 +404,29 @@ export default function WhatIfSimulatorPanel({ baseTxs, scenario, onChange, curr
 
       <div className="mt-3 flex flex-wrap gap-2 text-xs">
         <span className="rounded bg-emerald-50 px-2 py-1 font-medium text-emerald-700">
-          Subscription savings: {fmtAmount(estimatedMonthlySubscriptionSave, currency)}/mo
+          Prenumerationsbesparing: {fmtAmount(estimatedMonthlySubscriptionSave, currency)}/mån
         </span>
         <span className="rounded bg-blue-50 px-2 py-1 font-medium text-blue-700">
-          Income scenario: {scenario.incomeMultiplier}%
+          Inkomstscenario: {scenario.incomeMultiplier}%
         </span>
         <span className="rounded bg-orange-50 px-2 py-1 font-medium text-orange-700">
-          Spend cut: {scenario.spendingReductionPercent}%
+          Utgiftsminskning: {scenario.spendingReductionPercent}%
         </span>
         <button
           onClick={saveSnapshot}
           className="rounded bg-slate-900 px-2 py-1 font-medium text-white hover:bg-slate-800"
         >
-          Save snapshot
+          Spara körning
         </button>
       </div>
 
       {snapshots.length > 0 && (
         <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Recent scenario snapshots</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Senaste scenariokörningar</p>
           <ul className="mt-2 space-y-1">
             {snapshots.slice(0, 5).map((entry) => (
               <li key={entry.id} className="rounded border border-slate-200 bg-white px-2 py-1.5 text-xs text-slate-700">
-                {entry.createdAt} · Income {entry.scenario.incomeMultiplier}% · Spend cut {entry.scenario.spendingReductionPercent}% · Shock {fmtAmount(entry.scenario.oneTimeShock, currency)} · Sub save {fmtAmount(entry.estimatedSubscriptionSavePerMonth, currency)}/mo
+                {entry.createdAt} · Inkomst {entry.scenario.incomeMultiplier}% · Utgiftsminskning {entry.scenario.spendingReductionPercent}% · Schock {fmtAmount(entry.scenario.oneTimeShock, currency)} · Pren besparing {fmtAmount(entry.estimatedSubscriptionSavePerMonth, currency)}/mån
               </li>
             ))}
           </ul>

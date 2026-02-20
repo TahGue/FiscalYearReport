@@ -1,23 +1,6 @@
 "use client";
 
-import type { BufferTargets, BudgetBand, ContributionModel, ViewScope } from "@/components/budget/BudgetProvider";
-import type { AISettings, Transaction } from "@/types/finance";
-import type { BudgetGoal } from "@/lib/optimizer";
-
-interface BackupPayload {
-  exportedAt: string;
-  version: string;
-  selfTxs: Transaction[];
-  partnerTxs: Transaction[];
-  currency: string;
-  selectedMonth: string;
-  viewScope: ViewScope;
-  contributionModel: ContributionModel;
-  budgetBands: BudgetBand[];
-  bufferTargets: BufferTargets;
-  goals: BudgetGoal[];
-  aiSettings: AISettings;
-}
+import type { BudgetBackupPayload as BackupPayload } from "@/components/budget/BudgetProvider";
 
 interface Props {
   payload: BackupPayload;

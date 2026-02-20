@@ -34,6 +34,18 @@ const RULES: Rule[] = [
       /\bstipendium\b/i,
       /swish\s+mottagen/i,
       /\binkomst\b/i,
+      /\bbarnbidrag\b/i,
+      /\bföräldrapenning\b/i,
+      /\bforaldrapenning\b/i,
+      /\bsjukpenning\b/i,
+      /\bstudiebidrag\b/i,
+      /\baktivitetsstöd\b/i,
+      /\baktivitetsstod\b/i,
+      /\bskatteåterbäring\b/i,
+      /\bskatteaterbaring\b/i,
+      /\butdelning\b/i,
+      /\bränteinkomst\b/i,
+      /\branteinkomst\b/i,
     ],
   },
   {
@@ -56,6 +68,17 @@ const RULES: Rule[] = [
       /\bkvantum\b/i,
       /\bmaxi\b/i,
       /\bpris\s+nyckelkund\b/i,
+      /\btempo\b/i,
+      /\bcoop\s*extra\b/i,
+      /\bcoop\s*forum\b/i,
+      /\bica\s*nära\b/i,
+      /\bica\s*nara\b/i,
+      /\bmatöppet\b/i,
+      /\bmatoppet\b/i,
+      /\bdelitea\b/i,
+      /\bmatsmart\b/i,
+      /\bfoodora\s*market\b/i,
+      /\bwolt\s*market\b/i,
     ],
   },
   {
@@ -71,6 +94,11 @@ const RULES: Rule[] = [
       /\bbp\b/i,
       /\bdrivmedel\b/i,
       /\bbränsle\b/i,
+      /\bbransle\b/i,
+      /\bsupercharger\b/i,
+      /\btesla\s*supercharger\b/i,
+      /\bincharge\b/i,
+      /\bmer\s*sweden\b/i,
     ],
   },
   {
@@ -98,6 +126,17 @@ const RULES: Rule[] = [
       /\bab\s+storstockholm\b/i,
       /v.stra\s+g.talands/i,
       /\bk\*vr\s+resa\b/i,
+      /\bmalartag\b/i,
+      /\bmälartåg\b/i,
+      /\bmtr\b/i,
+      /\bsnalltaget\b/i,
+      /\bsnälltåget\b/i,
+      /\barlanda\s*express\b/i,
+      /\bflygbussarna\b/i,
+      /\bvoi\b/i,
+      /\btier\b/i,
+      /\blime\b/i,
+      /\breskassa\b/i,
     ],
   },
   {
@@ -110,6 +149,10 @@ const RULES: Rule[] = [
       /\bparkway\b/i,
       /\bparkman\b/i,
       /\bhojab\b/i,
+      /\baimopark\b/i,
+      /\bapcoa\b/i,
+      /\bmobill\b/i,
+      /\bparkando\b/i,
     ],
   },
   {
@@ -144,6 +187,17 @@ const RULES: Rule[] = [
       /\bplaystation\b/i,
       /\bsteam\b/i,
       /\bif\s+metall\b/i,
+      /\btele2\b/i,
+      /\bbahnhof\b/i,
+      /\bbredband2\b/i,
+      /\bhalebop\b/i,
+      /\btv4\s*play\b/i,
+      /\bstorytel\b/i,
+      /\bbookbeat\b/i,
+      /\bnextory\b/i,
+      /\bpodme\b/i,
+      /\byoutube\s*premium\b/i,
+      /\bicloud\b/i,
     ],
   },
   {
@@ -169,6 +223,12 @@ const RULES: Rule[] = [
       /\bbistro\b/i,
       /\bkrog\b/i,
       /\bwok\b/i,
+      /\bfoodora\b/i,
+      /\bwolt\b/i,
+      /\buber\s*eats\b/i,
+      /\bespresso\s*house\b/i,
+      /\bwaynes\b/i,
+      /\bjoe\s*&\s*the\s*juice\b/i,
     ],
   },
   {
@@ -208,6 +268,13 @@ const RULES: Rule[] = [
       /\bautodoc\b/i,
       /\bpaypal\b/i,
       /\bpaddle\.net\b/i,
+      /\bclas\s*ohlson\b/i,
+      /\bahlens\b/i,
+      /\båhl[eé]ns\b/i,
+      /\bxxl\b/i,
+      /\bstadium\b/i,
+      /\bmio\b/i,
+      /\brusta\b/i,
     ],
   },
   {
@@ -221,6 +288,10 @@ const RULES: Rule[] = [
       /\bforsakring\b/i,
       /\bförsäkring\b/i,
       /\binsurance\b/i,
+      /\bdina\s*försäkringar\b/i,
+      /\bdina\s*forsakringar\b/i,
+      /\bmoderna\s*försäkringar\b/i,
+      /\bmoderna\s*forsakringar\b/i,
     ],
   },
   {
@@ -239,6 +310,16 @@ const RULES: Rule[] = [
       /\bhalsa\b/i,
       /\boptik\b/i,
       /\bglasögon\b/i,
+      /\bglasogon\b/i,
+      /\bapotek\s*hjärtat\b/i,
+      /\bapotek\s*hjartat\b/i,
+      /\bkronans\s*apotek\b/i,
+      /\bapoteksgruppen\b/i,
+      /\bapotea\b/i,
+      /\bkry\b/i,
+      /\bdoktor\.se\b/i,
+      /\bmindler\b/i,
+      /\bwerlabs\b/i,
     ],
   },
   {
@@ -258,6 +339,18 @@ const RULES: Rule[] = [
       /\binternet\b/i,
       /\bbrf\b/i,
       /\bhsb\b/i,
+      /\bavgift\b/i,
+      /\bsamfällighet\b/i,
+      /\bsamfallighet\b/i,
+      /\bvattenfall\b/i,
+      /\be\.?on\b/i,
+      /\bfortum\b/i,
+      /\bellevio\b/i,
+      /\benergibolag\b/i,
+      /\bsophämtning\b/i,
+      /\bsophamtning\b/i,
+      /\brenhållning\b/i,
+      /\brenhallning\b/i,
     ],
   },
   {
@@ -274,6 +367,11 @@ const RULES: Rule[] = [
       /\bkrypto\b/i,
       /\bcrypto\b/i,
       /\bbitcoin\b/i,
+      /\bisk\b/i,
+      /\bkapitalförsäkring\b/i,
+      /\bkapitalforsakring\b/i,
+      /\bamf\b/i,
+      /\bskandia\b/i,
     ],
   },
   {
@@ -290,6 +388,11 @@ const RULES: Rule[] = [
       /\bgava\b/i,
       /\bwestern\s*union\b/i,
       /\bremittance\b/i,
+      /\bröda\s*korset\b/i,
+      /\broda\s*korset\b/i,
+      /\bunicef\b/i,
+      /\brädda\s*barnen\b/i,
+      /\bradda\s*barnen\b/i,
     ],
   },
   {
@@ -300,6 +403,13 @@ const RULES: Rule[] = [
       /\bwise\b/i,
       /\btransfer\b/i,
       /\boverforin/i,
+      /\böverföring\b/i,
+      /\boverforing\b/i,
+      /\böverföring\s+via\s+internet\b/i,
+      /\boverforing\s+via\s+internet\b/i,
+      /\bbankgiro\b/i,
+      /\bplusgiro\b/i,
+      /swish\s+betalning/i,
       /^\+46\d{9}$/,
       /^\d{10,12}$/,
     ],
@@ -315,6 +425,11 @@ const RULES: Rule[] = [
       /\bsvea\s*p-?service\b/i,
       /\bskattekonto\b/i,
       /\bcsn\b/i,
+      /\bklarna\b/i,
+      /\bqliro\b/i,
+      /\bcollector\b/i,
+      /\bbank\s*norwegian\b/i,
+      /\bremember\b/i,
     ],
   },
 ];
@@ -324,13 +439,17 @@ const USER_OVERRIDES_KEY = "budget-category-overrides";
 export function categorize(description: string): Category {
   const overrides = loadOverrides();
   const key = description.toLowerCase().trim();
+  const normalizedDescription = description
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
   if (overrides[key]) {
     return overrides[key] as Category;
   }
 
   for (const rule of RULES) {
     for (const pattern of rule.patterns) {
-      if (pattern.test(description)) {
+      if (pattern.test(description) || pattern.test(normalizedDescription)) {
         return rule.category;
       }
     }

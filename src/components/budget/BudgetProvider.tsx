@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { categorize } from "@/lib/categorize";
 import { getDefaultGoals, type BudgetGoal } from "@/lib/optimizer";
 import type { AISettings, ParseResult, Transaction, TxOwner } from "@/types/finance";
+import { DEFAULT_SWEDEN_SETTINGS, type SwedenSettings } from "@/types/sweden";
 
 const AI_SETTINGS_KEY = "budget-consultation-ai-settings";
 const GOALS_KEY = "budget-consultation-goals";
@@ -12,6 +13,7 @@ const CONTRIBUTION_MODEL_KEY = "budget-consultation-contribution-model";
 const BUDGET_BANDS_KEY = "budget-consultation-budget-bands";
 const BUFFER_TARGETS_KEY = "budget-consultation-buffer-targets";
 const ONBOARDING_KEY = "budget-consultation-onboarding-dismissed";
+const SWEDEN_SETTINGS_KEY = "budget-consultation-sweden-settings";
 
 export type ViewScope = "household" | "self" | "partner";
 export type ContributionModel = "equal" | "income_weighted";
@@ -21,6 +23,30 @@ export interface BudgetBand {
   min: number;
   target: number;
   max: number;
+}
+
+function loadSwedenSettings(): SwedenSettings {
+  if (typeof window === "undefined") return DEFAULT_SWEDEN_SETTINGS;
+  try {
+    const raw = localStorage.getItem(SWEDEN_SETTINGS_KEY);
+    if (!raw) return DEFAULT_SWEDEN_SETTINGS;
+    const parsed = JSON.parse(raw) as Partial<SwedenSettings>;
+    return {
+      ...DEFAULT_SWEDEN_SETTINGS,
+      ...parsed,
+      profile: {
+        ...DEFAULT_SWEDEN_SETTINGS.profile,
+        ...(parsed.profile ?? {}),
+      },
+      benefits: {
+        ...DEFAULT_SWEDEN_SETTINGS.benefits,
+        ...(parsed.benefits ?? {}),
+      },
+      contracts: Array.isArray(parsed.contracts) ? parsed.contracts : DEFAULT_SWEDEN_SETTINGS.contracts,
+    };
+  } catch {
+    return DEFAULT_SWEDEN_SETTINGS;
+  }
 }
 
 export interface BufferTargets {
@@ -42,6 +68,7 @@ export interface BudgetBackupPayload {
   bufferTargets: BufferTargets;
   goals: BudgetGoal[];
   aiSettings: AISettings;
+  swedenSettings?: SwedenSettings;
 }
 
 const defaultAISettings: AISettings = {
@@ -160,6 +187,7 @@ interface BudgetContextValue {
   baseFilteredTxs: Transaction[];
   filteredTxs: Transaction[];
   goals: BudgetGoal[];
+  swedenSettings: SwedenSettings;
   setSelectedMonth: (month: string) => void;
   setAISettings: (next: AISettings) => void;
   setViewScope: (scope: ViewScope) => void;
@@ -169,6 +197,7 @@ interface BudgetContextValue {
   setOnboardingDismissed: (dismissed: boolean) => void;
   restoreFromBackup: (payload: BudgetBackupPayload) => void;
   setGoals: (next: BudgetGoal[]) => void;
+  setSwedenSettings: (next: SwedenSettings) => void;
   loadParsedTransactions: (result: ParseResult) => void;
   loadParsedTransactionsByOwner: (owner: TxOwner, result: ParseResult) => void;
   reApplyCategories: () => void;
@@ -209,6 +238,7 @@ export function BudgetProvider({ children }: { children: React.ReactNode }) {
   const [bufferTargets, setBufferTargets] = useState<BufferTargets>(loadBufferTargets);
   const [onboardingDismissed, setOnboardingDismissed] = useState<boolean>(loadOnboardingDismissed);
   const [goals, setGoals] = useState<BudgetGoal[]>(loadInitialGoals);
+  const [swedenSettings, setSwedenSettings] = useState<SwedenSettings>(loadSwedenSettings);
 
   useEffect(() => {
     localStorage.setItem(AI_SETTINGS_KEY, JSON.stringify(aiSettings));
@@ -237,6 +267,10 @@ export function BudgetProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     localStorage.setItem(ONBOARDING_KEY, onboardingDismissed ? "1" : "0");
   }, [onboardingDismissed]);
+
+  useEffect(() => {
+    localStorage.setItem(SWEDEN_SETTINGS_KEY, JSON.stringify(swedenSettings));
+  }, [swedenSettings]);
 
   const txs = useMemo(
     () =>
@@ -296,6 +330,7 @@ export function BudgetProvider({ children }: { children: React.ReactNode }) {
       baseFilteredTxs,
       filteredTxs,
       goals,
+      swedenSettings,
       setSelectedMonth,
       setAISettings,
       setViewScope,
@@ -303,6 +338,7 @@ export function BudgetProvider({ children }: { children: React.ReactNode }) {
       setBudgetBands,
       setBufferTargets,
       setOnboardingDismissed,
+      setSwedenSettings,
       restoreFromBackup: (payload) => {
         setSelfTxs(Array.isArray(payload.selfTxs) ? payload.selfTxs : []);
         setPartnerTxs(Array.isArray(payload.partnerTxs) ? payload.partnerTxs : []);
@@ -314,6 +350,7 @@ export function BudgetProvider({ children }: { children: React.ReactNode }) {
         setBufferTargets(payload.bufferTargets || loadBufferTargets());
         setGoals(Array.isArray(payload.goals) ? payload.goals : getDefaultGoals());
         setAISettings(payload.aiSettings || defaultAISettings);
+        setSwedenSettings(payload.swedenSettings || DEFAULT_SWEDEN_SETTINGS);
       },
       setGoals,
       loadParsedTransactions: (result) => {
@@ -353,6 +390,7 @@ export function BudgetProvider({ children }: { children: React.ReactNode }) {
       baseFilteredTxs,
       filteredTxs,
       goals,
+      swedenSettings,
       setViewScope,
       setContributionModel,
       setBudgetBands,
@@ -361,6 +399,7 @@ export function BudgetProvider({ children }: { children: React.ReactNode }) {
       setSelectedMonth,
       setAISettings,
       setGoals,
+      setSwedenSettings,
     ],
   );
 

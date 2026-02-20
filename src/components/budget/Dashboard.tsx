@@ -25,6 +25,14 @@ interface Props {
   currency: string;
 }
 
+const TRANSFER_DESC_PATTERN = /overforing via internet|överföring via internet|overforing|överföring|\btransfer\b|\bswish\b/i;
+
+function isTransferLikeTx(tx: Transaction): boolean {
+  const category = (tx.category ?? "").toLowerCase();
+  const description = tx.description ?? "";
+  return category === "transfers" || TRANSFER_DESC_PATTERN.test(description);
+}
+
 function fmt(amount: number, currency: string) {
   return `${amount.toFixed(0)} ${currency}`;
 }
@@ -66,11 +74,13 @@ function buildCategoryData(txs: Transaction[]) {
 }
 
 export default function Dashboard({ txs, currency }: Props) {
-  const { income, spend, net, topMerchants } = basicInsights(txs);
-  const anomalies = detectAnomalies(txs);
+  const externalTxs = txs.filter((tx) => !isTransferLikeTx(tx));
+
+  const { income, spend, net, topMerchants } = basicInsights(externalTxs);
+  const anomalies = detectAnomalies(externalTxs);
   const series = balanceSeries(txs);
-  const recurring = detectRecurring(txs);
-  const categoryData = buildCategoryData(txs);
+  const recurring = detectRecurring(externalTxs);
+  const categoryData = buildCategoryData(externalTxs);
   const merchantChartData = topMerchants.map(([name, value]) => ({ name, value }));
   const barColors = ["#16a34a", "#22c55e", "#4ade80", "#86efac", "#bbf7d0"];
 

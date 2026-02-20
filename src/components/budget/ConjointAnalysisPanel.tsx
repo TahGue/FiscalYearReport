@@ -3,6 +3,7 @@
 import type { Transaction } from "@/types/finance";
 import type { ContributionModel } from "@/components/budget/BudgetProvider";
 import { calculateContributionBreakdown } from "@/lib/roadmapInsights";
+import { analyzeConjointInterconnection } from "@/lib/conjointInsights";
 
 interface Props {
   selfTxs: Transaction[];
@@ -78,10 +79,11 @@ function calculateAlignmentScore(rows: CategorySplit[]): number {
 }
 
 export default function ConjointAnalysisPanel({ selfTxs, partnerTxs, contributionModel, currency }: Props) {
-  const rows = buildCategoryRows(selfTxs, partnerTxs);
+  const interconnection = analyzeConjointInterconnection(selfTxs, partnerTxs);
+  const rows = buildCategoryRows(interconnection.selfExternalTxs, interconnection.partnerExternalTxs);
 
-  const selfIncome = selfTxs.filter((tx) => tx.amount > 0).reduce((sum, tx) => sum + tx.amount, 0);
-  const partnerIncome = partnerTxs.filter((tx) => tx.amount > 0).reduce((sum, tx) => sum + tx.amount, 0);
+  const selfIncome = interconnection.trueSelfIncome;
+  const partnerIncome = interconnection.truePartnerIncome;
   const contribution = calculateContributionBreakdown(selfIncome, partnerIncome, contributionModel);
 
   const householdSpend = rows.reduce((sum, row) => sum + row.householdAmount, 0);
@@ -130,6 +132,48 @@ export default function ConjointAnalysisPanel({ selfTxs, partnerTxs, contributio
         <p className="font-medium text-slate-800">Föreslaget delat kostnadsbidrag ({contributionModel.replace("_", " ")})</p>
         <p className="mt-1">
           Jag: {(contribution.selfShare * 100).toFixed(0)}% · Partner: {(contribution.partnerShare * 100).toFixed(0)}%
+        </p>
+      </div>
+
+      <div className="mt-3 grid gap-3 md:grid-cols-3">
+        <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+          <div className="text-xs uppercase tracking-wide text-slate-500">Skickat från dig till partner</div>
+          <div className="mt-1 text-lg font-semibold text-slate-900">{formatAmount(interconnection.selfToPartnerMonthly, currency)}/mån</div>
+          <div className="mt-1 text-xs text-slate-500">Matchat 1:1 mot partnerns data</div>
+        </div>
+        <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+          <div className="text-xs uppercase tracking-wide text-slate-500">Skickat från partner till dig</div>
+          <div className="mt-1 text-lg font-semibold text-slate-900">{formatAmount(interconnection.partnerToSelfMonthly, currency)}/mån</div>
+          <div className="mt-1 text-xs text-slate-500">Matchat 1:1 mot din data</div>
+        </div>
+        <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+          <div className="text-xs uppercase tracking-wide text-slate-500">Ekonomisk sammankoppling</div>
+          <div className="mt-1 text-lg font-semibold text-slate-900">{interconnection.transferDependencyScore.toFixed(0)}%</div>
+          <div className="mt-1 text-xs text-slate-500">Baserat på matchade volymer</div>
+        </div>
+      </div>
+
+      <div className="mt-3 grid gap-3 md:grid-cols-2">
+        <div className="rounded-lg border border-slate-200 p-3 text-sm text-slate-700">
+          <p className="font-medium text-slate-800">Identifierade överföringar (Dina konton)</p>
+          <ul className="mt-1 space-y-1 text-xs text-slate-600">
+            <li>Totalt utgående (nyckelord): <span className="font-medium text-slate-800">{formatAmount(interconnection.selfTotalOutgoingTransfers, currency)}</span></li>
+            <li>Totalt inkommande (nyckelord): <span className="font-medium text-slate-800">{formatAmount(interconnection.selfTotalIncomingTransfers, currency)}</span></li>
+          </ul>
+        </div>
+        <div className="rounded-lg border border-slate-200 p-3 text-sm text-slate-700">
+          <p className="font-medium text-slate-800">Identifierade överföringar (Partners konton)</p>
+          <ul className="mt-1 space-y-1 text-xs text-slate-600">
+            <li>Totalt utgående (nyckelord): <span className="font-medium text-slate-800">{formatAmount(interconnection.partnerTotalOutgoingTransfers, currency)}</span></li>
+            <li>Totalt inkommande (nyckelord): <span className="font-medium text-slate-800">{formatAmount(interconnection.partnerTotalIncomingTransfers, currency)}</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="mt-3 rounded-lg border border-indigo-200 bg-indigo-50/40 p-3 text-sm text-slate-700">
+        <p className="font-medium text-slate-800">Interaktionssignal</p>
+        <p className="mt-1">
+          Kategoriöverlapp: {interconnection.sharedCategoryOverlapScore.toFixed(0)}% · Nettoriktning: {formatAmount(interconnection.netDirectionMonthly, currency)}/mån
         </p>
       </div>
 
@@ -192,6 +236,36 @@ export default function ConjointAnalysisPanel({ selfTxs, partnerTxs, contributio
                 <td className="px-3 py-2">{(row.shareGap * 100).toFixed(0)} pkn</td>
               </tr>
             ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="mt-4 overflow-x-auto rounded-lg border border-slate-200">
+        <table className="min-w-full divide-y divide-slate-200 text-sm">
+          <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
+            <tr>
+              <th className="px-3 py-2">Datum</th>
+              <th className="px-3 py-2">Från</th>
+              <th className="px-3 py-2">Till</th>
+              <th className="px-3 py-2">Belopp</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-100 bg-white text-slate-700">
+            {interconnection.matchedTransfers.slice(0, 8).map((transfer, idx) => (
+              <tr key={`${transfer.date}-${transfer.from}-${transfer.to}-${idx}`}>
+                <td className="px-3 py-2">{transfer.date}</td>
+                <td className="px-3 py-2">{transfer.from === "self" ? "Jag" : "Partner"}</td>
+                <td className="px-3 py-2">{transfer.to === "self" ? "Jag" : "Partner"}</td>
+                <td className="px-3 py-2 font-medium">{formatAmount(transfer.amount, currency)}</td>
+              </tr>
+            ))}
+            {interconnection.matchedTransfers.length === 0 && (
+              <tr>
+                <td className="px-3 py-2 text-slate-500" colSpan={4}>
+                  Inga tydliga transfermatchningar hittades ännu. Ladda upp fler månader eller märk Swish/överföringar tydligare.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

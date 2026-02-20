@@ -132,9 +132,9 @@ export function buildSpendingAlerts(
     alerts.push({
       id: "volatility-high",
       severity: "high",
-      title: "High spending volatility",
-      reason: `Monthly spending variance is ${volatility.toFixed(0)}%.`,
-      recommendation: `Build/maintain at least ${bufferTargets.monthlyVolatility.toFixed(0)} buffer for monthly fluctuations.`,
+      title: "Hög utgiftsvolatilitet",
+      reason: `Månadsvariansen i utgifter är ${volatility.toFixed(0)}%.`,
+      recommendation: `Bygg eller behåll minst ${bufferTargets.monthlyVolatility.toFixed(0)} i buffert för månatliga svängningar.`,
     });
   }
 
@@ -143,9 +143,9 @@ export function buildSpendingAlerts(
       alerts.push({
         id: `category-spike-${pattern.category}`,
         severity: pattern.baselineDeltaPercent > 40 ? "high" : "medium",
-        title: `${pattern.category} is above baseline`,
-        reason: `${pattern.category} is ${pattern.baselineDeltaPercent.toFixed(0)}% above normal month average.`,
-        recommendation: "Review top merchants in this category and set a temporary cap for next month.",
+        title: `${pattern.category} ligger över normalnivån`,
+        reason: `${pattern.category} är ${pattern.baselineDeltaPercent.toFixed(0)}% över normalt månadsgenomsnitt.`,
+        recommendation: "Gå igenom största handlare i kategorin och sätt ett tillfälligt tak inför nästa månad.",
       });
     }
   }
@@ -157,9 +157,9 @@ export function buildSpendingAlerts(
       alerts.push({
         id: `band-breach-${band.category}`,
         severity: "high",
-        title: `${band.category} exceeded max band`,
-        reason: `Current month ${match.currentMonth.toFixed(0)} is above max ${band.max.toFixed(0)}.`,
-        recommendation: "Run a category-specific spending freeze for 2 weeks.",
+        title: `${band.category} passerade maxgränsen`,
+        reason: `Nuvarande månad ${match.currentMonth.toFixed(0)} är över max ${band.max.toFixed(0)}.`,
+        recommendation: "Inför ett kategorispecifikt köpstopp i två veckor.",
       });
     }
   }
@@ -184,12 +184,12 @@ export function findSavingsOpportunities(txs: Transaction[], patterns: CategoryP
     const monthlySaving = expensive.reduce((sum, sub) => sum + Math.abs(sub.amount) * 0.4, 0);
     opportunities.push({
       id: "subscriptions-rightsize",
-      title: "Right-size recurring subscriptions",
+      title: "Optimera återkommande prenumerationer",
       monthlySaving,
       annualSaving: monthlySaving * 12,
       impact: "high",
-      reason: `${expensive.length} recurring subscriptions dominate recurring outflow.`,
-      action: "Pause/cancel lowest-value subscriptions and move to free alternatives.",
+      reason: `${expensive.length} prenumerationer står för merparten av de återkommande utgifterna.`,
+      action: "Pausa eller avsluta de med lägst värde och byt till gratisalternativ där det går.",
     });
   }
 
@@ -198,12 +198,12 @@ export function findSavingsOpportunities(txs: Transaction[], patterns: CategoryP
     const monthlySaving = dining.currentMonth * 0.2;
     opportunities.push({
       id: "dining-reduction",
-      title: "Reduce dining out by 20%",
+      title: "Minska restaurangutgifter med 20 %",
       monthlySaving,
       annualSaving: monthlySaving * 12,
       impact: monthlySaving > 800 ? "high" : "medium",
-      reason: "Dining spend is one of the easiest discretionary levers.",
-      action: "Set weekly dining cap and replace one paid meal with home-cooked meals.",
+      reason: "Att äta ute är ofta den enklaste diskretionära hävstången.",
+      action: "Sätt ett veckotak och ersätt minst en måltid med hemlagat.",
     });
   }
 
@@ -212,12 +212,12 @@ export function findSavingsOpportunities(txs: Transaction[], patterns: CategoryP
     const monthlySaving = shopping.currentMonth * 0.15;
     opportunities.push({
       id: "shopping-throttle",
-      title: "Throttle discretionary shopping",
+      title: "Bromsa nöjesköp",
       monthlySaving,
       annualSaving: monthlySaving * 12,
       impact: monthlySaving > 500 ? "medium" : "low",
-      reason: "Current shopping is above personal baseline.",
-      action: "Apply 24-hour wait rule for non-essential purchases over 300 SEK.",
+      reason: "Shopping ligger över din egna baslinje.",
+      action: "Använd 24-timmarsregeln för icke-nödvändiga köp över 300 kr.",
     });
   }
 
@@ -266,7 +266,7 @@ export function buildWeeklySummary(txs: Transaction[], currency: string): string
   }
 
   const delta = lastWeekSpend > 0 ? ((thisWeekSpend - lastWeekSpend) / lastWeekSpend) * 100 : 0;
-  return `This week spending: ${thisWeekSpend.toFixed(0)} ${currency}. Last week: ${lastWeekSpend.toFixed(0)} ${currency}. Week-over-week change: ${delta.toFixed(0)}%.`;
+  return `Denna vecka: ${thisWeekSpend.toFixed(0)} ${currency}. Förra veckan: ${lastWeekSpend.toFixed(0)} ${currency}. Vecka mot vecka: ${delta.toFixed(0)}%.`;
 }
 
 export function buildNextBestActions(opportunities: SavingsOpportunity[], alerts: SpendingAlert[]): NextBestAction[] {
@@ -277,7 +277,7 @@ export function buildNextBestActions(opportunities: SavingsOpportunity[], alerts
       id: `opp-${opportunity.id}`,
       title: opportunity.title,
       expectedMonthlyImpact: opportunity.monthlySaving,
-      explainability: `${opportunity.reason} Action: ${opportunity.action}`,
+      explainability: `${opportunity.reason} Åtgärd: ${opportunity.action}`,
     });
   }
 
@@ -285,9 +285,9 @@ export function buildNextBestActions(opportunities: SavingsOpportunity[], alerts
   if (topAlert) {
     actions.push({
       id: `alert-${topAlert.id}`,
-      title: `Resolve: ${topAlert.title}`,
+      title: `Åtgärda: ${topAlert.title}`,
       expectedMonthlyImpact: 0,
-      explainability: `${topAlert.reason} Recommendation: ${topAlert.recommendation}`,
+      explainability: `${topAlert.reason} Rekommendation: ${topAlert.recommendation}`,
     });
   }
 
